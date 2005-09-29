@@ -70,9 +70,16 @@ sub fix_perms
 	&mysystem("chown root:root $dir/logs");
 	&mysystem("chown root:root $dir/logs/pidfile");
 	&mysystem("chmod -R go-rwx $dir");
-	&mysystem("chmod -R go+rx $dir/*cgi*");
 
-	&mysystem("chown -R $user:$user $dir/rpc");
+	if ( glob("$dir/*cgi*") )
+	{
+		&mysystem("chmod -R go+rx $dir/*cgi*");
+	}
+
+	if ( -e "$dir/rpc" )
+	{
+		&mysystem("chown -R $user:$user $dir/rpc");
+	}
 
 	&mysystem("chmod go+x $dir");
 	&mysystem("chmod go+x $dir/logs");
