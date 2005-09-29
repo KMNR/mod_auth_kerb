@@ -13,7 +13,8 @@ if ( $ARGV[0] ne "--skip-svn" )
 	if ( $tmp1[9] != $tmp2[9] )
 	{
 		print "Restarting update script, file changed.\n";
-		exec( "/local/apache/update-local-dirs", "--skip-svn" );
+		system( "/local/apache/update-local-dirs", "--skip-svn" );
+		exit;
 	}
 }
 
@@ -27,6 +28,8 @@ while ( $file = readdir(DIR) )
 			print "$file must not be a server install, no httpd.conf\n";
 			next;
 		}
+
+		print "Found install at: /local/$file\n";
 
 		$user = undef;
 		open( IN, "/local/$file/conf/httpd.conf" );
