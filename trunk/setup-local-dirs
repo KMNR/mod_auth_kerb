@@ -13,7 +13,7 @@ if ( $ARGV[0] ne "--skip-svn" )
 	if ( $tmp1[9] != $tmp2[9] )
 	{
 		print "Restarting update script, file changed.\n";
-		system( "/local/apache/update-local-dirs", "--skip-svn" );
+		system( "/local/apache/setup-local-dirs", "--skip-svn" );
 		exit;
 	}
 }
