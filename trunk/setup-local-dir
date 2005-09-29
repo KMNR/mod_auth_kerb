@@ -1,19 +1,19 @@
 #!/usr/bin/perl
 $| = 1;
 
-opendir(DIR, "/local");
+opendir( DIR, "/local" );
 while ( $file = readdir(DIR) )
 {
 	if ( $file eq "apache-root" || $file =~ /apache-root-.*/ )
 	{
-		if ( ! -e "/local/$file/conf/httpd.conf" )
+		if ( !-e "/local/$file/conf/httpd.conf" )
 		{
 			print "$file must not be a server install, no httpd.conf\n";
 			next;
 		}
 
 		$user = undef;
-		open(IN, "/local/$file/conf/httpd.conf");
+		open( IN, "/local/$file/conf/httpd.conf" );
 		while ( $line = <IN> )
 		{
 			if ( $line =~ /User\s+(.*?)\s*$/o )
@@ -22,7 +22,7 @@ while ( $file = readdir(DIR) )
 			}
 		}
 		close(IN);
-	
+
 		if ( $user eq "" )
 		{
 			die "Unable to determine user for /local/$file.\n";
@@ -32,7 +32,7 @@ while ( $file = readdir(DIR) )
 		system("cp -v /local/apache/conf/* /local/$file/conf/");
 
 		print "Fixing perms for /local/$file for user $user.\n";
-		&fix_perms("/local/$file", $user);
+		&fix_perms( "/local/$file", $user );
 
 		print "Updating scripts for /local/$file.\n";
 		&setup_scripts("/local/$file");
@@ -48,43 +48,46 @@ sub mysystem
 
 sub fix_perms
 {
-	my ($dir, $user) = @_;
+	my ( $dir, $user ) = @_;
 
-&mysystem("chown -R root:root $dir");
-&mysystem("chown -R $user:root $dir/logs");
-&mysystem("chown -R $user:root $dir/htdocs*");
-&mysystem("chown root:root $dir/logs");
-&mysystem("chown root:root $dir/logs/pidfile");
-&mysystem("chmod -R go-rwx $dir");
-&mysystem("chmod -R go+rx $dir/*cgi*");
+	&mysystem("chown -R root:root $dir");
+	&mysystem("chown -R $user:$user $dir/logs");
+	&mysystem("chown -R $user:$user $dir/htdocs*");
+	&mysystem("chown root:root $dir/logs");
+	&mysystem("chown root:root $dir/logs/pidfile");
+	&mysystem("chmod -R go-rwx $dir");
+	&mysystem("chmod -R go+rx $dir/*cgi*");
 
-&mysystem("chown -R $user:root $dir/rpc");
+	&mysystem("chown -R $user:$user $dir/rpc");
 
-&mysystem("chmod go+x $dir");
-&mysystem("chmod go+x $dir/logs");
+	&mysystem("chmod go+x $dir");
+	&mysystem("chmod go+x $dir/logs");
 
-if ( -e "$dir/phpa-cache" )
-{
-if ( $user eq "" ) { die "Cannot set phpa permissions, no user specified.\n"; }
-&mysystem("chown -R $user $dir/phpa-cache");
+	if ( -e "$dir/phpa-cache" )
+	{
+		if ( $user eq "" )
+		{
+			die "Cannot set phpa permissions, no user specified.\n";
+		}
+		&mysystem("chown -R $user:$user $dir/phpa-cache");
+	}
 }
-}
-
 
 sub setup_scripts
 {
 	my ($dir) = @_;
 
-#
-# First start
-#
+	#
+	# First start
+	#
 	unlink("$dir/start");
-	open(OUT, ">$dir/start");
+	open( OUT, ">$dir/start" );
 	print OUT "#!/bin/sh\n";
 	print OUT "TZ=CST6CDT\n";
 	print OUT "export TZ\n\n";
 	print OUT "cd $dir\n";
 	print OUT "echo Starting Apache in $dir\n";
+
 	if ( -e "$dir/phpa-cache" )
 	{
 		print OUT "touch $dir/phpa-cache/TMP\n";
@@ -94,11 +97,11 @@ sub setup_scripts
 	close(OUT);
 	&mysystem("chmod 700 $dir/start");
 
-#
-# And stop
-#
+	#
+	# And stop
+	#
 	unlink("$dir/stop");
-	open(OUT, ">$dir/stop");
+	open( OUT, ">$dir/stop" );
 	print OUT "#!/bin/sh\n";
 	print OUT "cd $dir\n";
 	print OUT "if [ -e logs/pidfile ]; then\n";
@@ -112,15 +115,16 @@ sub setup_scripts
 	print OUT "kill \`cat logs/pidfile\`\n";
 	print OUT "sleep 2\n";
 	print OUT "fi\n";
-	print OUT "rm -f $dir/logs/TMP $dir/logs/httpd.mm.* $dir/logs/ssl_mutex* $dir/logs/ssl_scache*\n";
+	print OUT
+		"rm -f $dir/logs/TMP $dir/logs/httpd.mm.* $dir/logs/ssl_mutex* $dir/logs/ssl_scache*\n";
 	close(OUT);
 	&mysystem("chmod 700 $dir/stop");
 
-#
-# And restart
-#
+	#
+	# And restart
+	#
 	unlink("$dir/restart");
-	open(OUT, ">$dir/restart");
+	open( OUT, ">$dir/restart" );
 	print OUT "#!/bin/sh\n";
 	print OUT "cd $dir\n";
 	print OUT "./stop\n";
@@ -129,11 +133,11 @@ sub setup_scripts
 	close(OUT);
 	&mysystem("chmod 700 $dir/restart");
 
-#
-# And reload
-#
+	#
+	# And reload
+	#
 	unlink("$dir/reload");
-	open(OUT, ">$dir/reload");
+	open( OUT, ">$dir/reload" );
 	print OUT "#!/bin/sh\n";
 	print OUT "cd $dir\n";
 	print OUT "if [ -e logs/pidfile ]; then\n";
