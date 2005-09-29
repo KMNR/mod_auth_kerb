@@ -1,0 +1,444 @@
+<TITLE>CGIWrap - Installation Instructions</TITLE>
+<CENTER><H2>CGIWrap - Installation Instructions</H2></CENTER>
+<HR><P>
+
+There are two sets of installation instructions here. The basic ones I use,
+and a real-world example config contributed by Piotr Klaban below.
+<P>
+
+<H3>Quick Installation</H3>
+<DL>
+	<P><DT>Look at the <A HREF="notes.html">notes</A> to see if 
+there are any hints for your platform.
+
+	<P><DT>Issue "./configure --help" to find out the various
+configuration options. You will need to specify some of them. At 
+the very least, you will want to specify "--with-httpd-user=USERID".
+
+	<P><DT>Type "./configure &lt;options&gt;" with whatever options you need..
+
+	<P><DT>Type "make"
+
+	<P><DT>If you specified the installation directory in the 
+options, you can type "make install" to do all the following steps.
+
+	<P><DT>Copy cgiwrap executable to your servers cgi-bin directory
+
+	<P><DT>Make cgiwrap owned by root, executable by all, and setuid. 
+(<B>Note:</B> This step must be performed while logged in as "<TT>root</TT>"</B>) 
+	<P>
+	<DD>chown root cgiwrap
+	<DD>chmod 4755 cgiwrap
+
+	<P><DT>Hardlink or symlink nph-cgiwrap, nph-cgiwrapd, cgiwrapd to 
+cgiwrap in the cgi-bin directory.
+	<P>
+	<DD>ln [-s] cgiwrap cgiwrapd
+	<DD>ln [-s] cgiwrap nph-cgiwrap
+	<DD>ln [-s] cgiwrap nph-cgiwrapd
+
+	<P><DT>You can, if you wish, install it with less permissive permissions. (Eg. 
+4750) But if you do this, make sure that the group of cgiwrap is the same 
+as the group that the server runs as.
+
+	<P><DT>*VERY IMPORTANT* - Do NOT allow any non-trusted user to run 
+scripts directly out of the main cgi-bin directory, as this will allow them to use
+cgiwrap to run any of the other users scripts. The reason for this is that 
+if they can run scripts as the same userid as the web server, they can
+subvert some of cgiwrap's security checks to allow them to run other users 
+scripts. I recommend not running ANY scripts on the web server directly, once
+you have cgiwrap installed.
+
+</DL>
+
+<P>
+<H3>Configuration Options</H3>
+<P>
+The following are options available with the 'configure' command.
+Items in boldface are highly recommended. Defaults can be seen by issuing
+'./configure --help' or by looking at the 'config.h' file after you have 
+run 'configure'.
+<P>
+At an absolute minimum, you will probably want to specify the 
+'--with-install-dir' and '--with-httpd-user' options.
+
+<P><DL>
+<DT>--with-perl=PATH
+<DD>path to perl executable to use
+
+<DT>--with-local-contact-name=NAME
+<DD>Specify the name of the local contact
+
+<DT><B>--with-local-contact-email</B>
+<DD>Specify the local contact's email address
+
+<DT>--with-local-contact-phone
+<DD>Specify the local contact's phone number
+
+<DT>--with-local-contact-url
+<DD>Specify a URL for the local contact
+
+<DT>--with-local-site-url
+<DD>Specify a URL for this site
+
+<DT><B>--with-local-doc-url</B>
+<DD>Specify a URL for a local copy of the cgiwrap docs
+
+<DT>--with-wall
+<DD>Add the '-Wall' option for compilation with gcc, this is intended
+primarily for development debugging.
+
+<DT>--with-install-group=GROUP
+<DD>group to install cgiwrap as
+
+<DT><B>--with-install-dir=PATH</B>
+<DD>path to installation directory - this should be the path to your 
+server's cgi-bin directory
+
+<DT>--with-cgi-dir=PATH
+<DD>path relative to home dir for cgi scripts
+
+<DT><B>--with-multiuser-cgi-dir=PATH</B>
+<DD>define a central cgi script directory that is searched if the script
+is not found in a user directory. This can be used to make a single script
+available that will run as any user, however, this can be very dangerous
+if you're not extremely careful designing your script. Do not enable
+this unless you know what you're doing. It is not needed for normal usage.
+
+<DT><B>--with-httpd-user=USER</B>
+<DD>define what userid the web server is running as - this is required
+
+<DT>--without-check-httpd-user
+<DD>don't check to make sure cgiwrap is being run by server userid - 
+this is not recommended
+
+<DT>--without-check-owner
+<DD>disable check for matching owner
+
+<DT>--without-check-group
+<DD>disable check for matching group
+
+<DT>--without-check-setuid
+<DD>disable check for setuid script
+
+<DT>--without-check-setgid
+<DD>disable check for setgid script
+
+<DT>--without-check-group-writable
+<DD>disable check for group writable script
+
+<DT>--without-check-world-writable
+<DD>disable check for world writable script
+
+<DT>--without-check-symlink
+<DD>disable check for symlinked script
+
+<DT>--with-check-shell
+<DD>enable check for a valid user shell
+
+<DT>--with-require-redirect-url
+<DD>require that REDIRECT_URL be set in calling environment
+
+<DT>--with-chroot=PATH
+<DD>chroots script to PATH prior to script execution, requires
+specific environment to be set up. See <A HREF="chroot.html">chroot docs</A>
+for more details.
+
+<DT>--with-minimum-uid=UID
+<D>set the minimum uid of user that can use cgiwrap, defaults to 100
+
+<DT>--with-minimum-gid=GID
+<D>set the minimum gid or aux gid of user that can use cgiwrap - not enabled by default
+
+<DT>--with-logging-syslog=LABEL
+<DD>enable logging script execution to syslog
+
+<DT>--with-logging-file=FILE
+<DD>enable logging script execution to file
+
+<DT>--without-script-subdirs
+<DD>prevent users from storing scripts in subdirs
+
+<DT>--without-redirect-stderr
+<DD>don't redirect stderr to stdout in scripts
+
+<DT>--without-initgroups
+<DD>disable use of initgroups() to clear non-userid auxilliary groups
+
+<DT>--without-setgroups
+<DD>disable use of setgroups() to add userid's auxilliary groups
+
+<DT>--with-rewrite=FILE
+<DD>use a file to rewrite user directories
+
+<DT>--with-setenv-path=STRING
+<DD>set PATH environment variable to STRING
+
+<DT>--with-setenv-tz=STRING
+<DD>set TZ environment variable to STRING
+
+<DT>--with-rlimit-cpu=SECONDS
+<DD>limit cpu time with setrlimit
+
+<DT>--with-rlimit-vmem=BYTES
+<DD>limit total virtual memory with setrlimit
+
+<DT>--with-rlimit-as=BYTES
+<DD>limit total available memory with setrlimit
+
+<DT>--with-rlimit-fsize=BYTES
+<DD>limit writable file size with setrlimit
+
+<DT>--with-rlimit-data=BYTES
+<DD>limit data segment size with setrlimit
+
+<DT>--with-rlimit-stack=BYTES
+<DD>limit stack segment size with setrlimit
+
+<DT>--with-rlimit-core=BYTES
+<DD>limit core file size with setrlimit
+
+<DT>--with-rlimit-rss=BYTES
+<DD>limit resident set size with setrlimit
+
+<DT>--with-rlimit-nproc=COUNT
+<DD>limit number of processes with setrlimit
+
+<DT>--with-rlimit-nofile=COUNT
+<DD>limit number of open files with setrlimit
+
+<DT>--with-rlimit-memlock=BYTES
+<DD>limit lockable memory with setrlimit
+
+<DT>--with-allow-file=FILE
+<DD>limit cgiwrap usage
+
+<DT>--with-deny-file=FILE
+<DD>limit cgiwrap usage
+
+<DT>--with-vhost-allow-dir=DIR
+<DD>limit cgiwrap usage specific to each vhost, to restrict UnixTools.ORG, you would create the access file '<TT>DIR/unixtools.org</TT>'.
+
+<DT>--with-vhost-deny-dir=DIR
+<DD>limit cgiwrap usage specific to each vhost
+
+<DT>--with-host-checking
+<DD>allow specifying hosts in allow/deny files
+
+<DT>--with-afs=DIR
+<DD>enable afs setpag() support
+</DL>
+
+<P><HR>
+<H3>Password Protected Installation</H3>
+<P>
+
+The following are pecial additional instructions for installing a copy of
+cgiwrap that allows users to create access controlled scripts. For this to
+work, you will need to have a single common password file that will be
+used by all authenticated scripts. 
+
+<DL>
+	<P><DT>Re run configure, specify "public_html/auth-cgi-bin" instead of 
+"public_html/cgi-bin" for the cgi directory.
+
+	<P><DT>Type make.
+
+	<P><DT>Create a new server cgi-bin directory called "auth-cgi-bin", and 
+install this new copy of cgiwrap into that directory the same way you installed 
+it into the cgi-bin directory. (4 copies, and set permissions). You will 
+now be able to use the url:  http://server/auth-cgi-bin/cgiwrap...
+
+	<P><DT>To enable access control, place a .htaccess or equivalent file in 
+the auth-cgi-bin directory where cgiwrap is located, that requires 
+authentication to get at any file in that directory, but will allow any 
+valid user to get through.
+
+	<P><DT>Now, your users can simply check: 1. That their script was 
+executed by them (eg. check the real uid of the script to make sure someone else 
+wasn't running it by hand) 2. That the REMOTE_USER environment variable 
+contains a user name that they want to allow to access the script.
+
+</DL>
+
+
+
+<P><HR>
+<H3>Supplementary Configuration</H3>
+<P>
+If you enabled the access file checking, you need to make sure and create 
+the necessary files.
+<P>
+If you enabled the user directory rewriting feature, you need to create 
+the configuration file that you specified in the configure run.
+
+<P>
+<HR>
+<PRE>
+Here is the real-world example, for those who have problems
+with cgiwrap installing.
+
+Assumptions:
+
+A. I use cgi-bin/ for global cgi scripts, you may choose /cgi-sys/ instead.
+B. I have installed apache in /usr/local/apache/ directory, you may have
+   it in different location (/etc/httpd/ etc.)
+C. I use WWW as a user web directory ('UserDir WWW' Apache directive),
+   you may choose public_html if you wish.
+D. I allow users place .cgi and .php scripts everywhere under the WWW/ directory
+   (--with-cgi-dir=WWW cgiwrap configuration option), you may choose another method.
+E. I have system-wide html pages in /usr/local/apache/WWW/HTML
+   ('DocumentRoot /usr/local/apache/WWW/HTML' apache directive)
+   and system-wide cgi-bin/ directory in /usr/local/apache/WWW/cgi-bin/
+   ('ScriptAlias' apache directive)
+
+Make sure you have installed php, that you can run it from the command line,
+and you see the '--enable-discard-path' configuration option in the output
+of the following command:
+  % php -i | grep configure
+If not, then before/after installing cgiwrap, install php as a normal program
+with the configuration option: --enable-discard-path
+
+cgiwrap install procedure:
+
+1. download and unpack cgiwrap archive
+
+  % wget http://telia.dl.sourceforge.net/sourceforge/cgiwrap/cgiwrap-3.8.tar.gz
+  % gtar zxvf cgiwrap-3.8.tar.gz
+  % cd cgiwrap-3.8
+
+2. configure it:
+
+Replace:
+- /usr/local/bin/php with /usr/bin/php or other location of your php program
+- WWW (in --with-cgi-dir=WWW) with public_html i.e. your users web directory
+- /usr/local/apache/WWW/cgi-bin with /home/httpd/cgi-sys if you use such a value
+  for ScriptAlias
+- admin@man.torun.pl with YOUR contact address
+- www (in --with-httpd-user=www) with apache if you run web server as 'apache' user
+
+./configure --with-check-shell --with-rlimit-core=0 --with-rlimit-cpu=60 \
+--without-redirect-stderr --without-logging-file --with-perl=/usr/bin/perl \
+--with-httpd-user=www --with-cgi-dir=WWW \
+--with-install-dir=/usr/local/apache/WWW/cgi-bin --with-wall \
+--with-local-contact-email=admin@man.torun.pl --with-php=/usr/local/bin/php \
+--with-php-interpreter
+
+  # wait ...
+  # wait more until configure checks everything
+
+3. run make
+
+  %  make
+
+That should output:
+
+gcc -c -Wall -g -O2  -I. -I. debug.c
+gcc -c -Wall -g -O2  -I. -I. util.c
+util.c: In function `CheckUser':
+util.c:370: warning: suggest parentheses around assignment used as truth value
+util.c: In function `UserInFile':
+util.c:1088: warning: subscript has type `char'
+util.c:1096: warning: subscript has type `char'
+gcc -c -Wall -g -O2  -I. -I. fetch.c
+gcc -c -Wall -g -O2  -I. -I. stdutil.c
+gcc -c -Wall -g -O2  -I. -I. msgs.c
+gcc -o cgiwrap cgiwrap.o debug.o util.o fetch.o stdutil.o msgs.o   
+
+4. install with 'make install':
+
+  % make install
+
+That would be executed (make install -n):
+
+rm -f /usr/local/apache/WWW/cgi-bin/cgiwrap
+rm -f /usr/local/apache/WWW/cgi-bin/cgiwrapd
+rm -f /usr/local/apache/WWW/cgi-bin/nph-cgiwrap
+rm -f /usr/local/apache/WWW/cgi-bin/nph-cgiwrapd
+# rm -f /usr/local/apache/WWW/cgi-bin/php-cgiwrap
+# rm -f /usr/local/apache/WWW/cgi-bin/php-cgiwrapd
+cp cgiwrap /usr/local/apache/WWW/cgi-bin/cgiwrap
+chown root /usr/local/apache/WWW/cgi-bin/cgiwrap
+chgrp root /usr/local/apache/WWW/cgi-bin/cgiwrap
+chmod 4755 /usr/local/apache/WWW/cgi-bin/cgiwrap
+ln /usr/local/apache/WWW/cgi-bin/cgiwrap /usr/local/apache/WWW/cgi-bin/cgiwrapd
+ln /usr/local/apache/WWW/cgi-bin/cgiwrap /usr/local/apache/WWW/cgi-bin/nph-cgiwrap
+ln /usr/local/apache/WWW/cgi-bin/cgiwrap /usr/local/apache/WWW/cgi-bin/nph-cgiwrapd
+# ln /usr/local/apache/WWW/cgi-bin/cgiwrap /usr/local/apache/WWW/cgi-bin/php-cgiwrap
+# ln /usr/local/apache/WWW/cgi-bin/cgiwrap /usr/local/apache/WWW/cgi-bin/php-cgiwrapd
+
+Then you see you have cgiwrap in the /usr/local/apache/WWW/cgi-bin/
+directory.
+
+5. Now configure Apache:
+
+  % cd /usr/local/apache/conf     (on linux: % cd /etc/httpd/conf/)
+  % vim httpd.conf                (or % pico httpd.conf)
+
+5a) add these lines to global directives:
+
+# change /usr/local/apache/WWW/cgi-bin/ to YOUR /cgi-bin/ real path
+ScriptAlias /cgi-bin/ "/usr/local/apache/WWW/cgi-bin/"
+
+AddHandler cgi-wrapper .php
+AddHandler cgi-wrapper .cgi
+Action cgi-wrapper /cgi-bin/cgiwrap
+
+5b) do not run cgiwrap on .cgi scripts in the global /cgi-bin/ directory:
+
+<Directory /usr/local/apache/WWW/cgi-bin>
+AllowOverride None
+Options None
+AddHandler cgi-script .cgi
+</DIrectory>
+
+5c) I have a phpMyAdmin installed in /user/local/apache/WWW/HTML/phpMyAdmin/,
+and I want it to be run as a 'www' user from the <home of www>/WWW/HTML/ directory
+
+<Location /phpMyAdmin/*>
+Action cgi-wrapper /cgi-bin/cgiwrap/www/HTML
+</Location>
+
+5d) I have some Virtual Domains defined. Every user can have its own
+    virtual domain. I want .cgi and .php scripts to be run as a specified user
+    ('makler' in this situation):
+
+<VirtualHost *>
+ServerAdmin info@klaban.torun.pl
+DocumentRoot /home/[... home directory/WWW here ...]/makler/WWW
+ServerName www.klaban.torun.pl
+ErrorLog logs/klaban_error_log
+CustomLog logs/klaban_access_log combined
+Action cgi-wrapper /cgi-bin/cgiwrap/makler
+
+# [... other configuration stuff discarded ...]
+
+</VirtualHost>
+
+6. Test your configuration before Apache reload (you may use /etc/init.d/httpd
+   instead of ~www/bin/apachectl):
+
+  % ~www/bin/apachectl configtest
+Syntax OK
+
+7. Reload apache web server:
+
+  % ~www/bin/apachectl stop    # (or: ~www/bin/apachectl restart)
+  % ~www/bin/apachectl start
+
+8. Test if the simple php script is executed OK:
+
+8a) create php script - your php scripts should be owned by the user, not root:
+
+  % su makler
+  % echo '<?php echo "php is OK<br>\n"; ?> HTML too' > ~makler/WWW/test-php.php
+
+8b) point your web browser to: http://www.klaban.torun.pl/test-php.php
+
+  Now you should see:
+php is OK
+HTML too  
+
+-- 
+Piotr Klaban
+

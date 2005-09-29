@@ -1,0 +1,72 @@
+<TITLE>CGIWrap - URL Quick Reference</TITLE>
+<CENTER><H2>CGIWrap - URL Quick Reference</H2></CENTER>
+<HR><P>
+
+In all of the below examples, replace SERVER with the hostname
+and port of your webserver. Replace USER with your userid, and replace
+SCRIPT with the name of the script that is located in your cgi-bin
+directory.
+<P>
+In the below URLs you can replace "<TT>cgiwrap</TT>" according to the
+following:
+
+<DL>
+	<P><DT>cgiwrap
+		<DD>Normal script execution
+	
+	<P><DT>cgiwrapd
+		<DD>Executes script, but returns debugging information, also is
+		returned preformatted, so you can see the source that the script is
+		outputting.
+		
+	<P><DT>nph-cgiwrap
+	<P><DT>nph-cgiwrapd
+		<DD>Same as above, except you sometimes need to use this if your
+		script outputs binary data, such as an image counter script.
+</DL>
+	
+<H3>Standard Installation of CGIWrap</H3>
+Place your scripts in your ~/public_html/cgi-bin/ directory
+<P>
+<UL>
+	<LI>http://SERVER/cgi-bin/cgiwrap/USER/SCRIPT
+	<LI>http://SERVER/cgi-bin/cgiwrap/~USER/SCRIPT
+</UL>
+<P>
+Or the old deprecated syntax of:
+<UL>
+	<LI>http://SERVER/cgi-bin/cgiwrap?user=USER&script=SCRIPT
+</UL>
+
+<H3>Password Protected Installation of CGIWrap</H3>
+Place your scripts in your ~/public_html/auth-cgi-bin/ directory
+<P>
+<UL>
+	<LI>http://SERVER/auth-cgi-bin/cgiwrap/USER/SCRIPT
+	<LI>http://SERVER/auth-cgi-bin/cgiwrap/~USER/SCRIPT
+</UL>
+<P>
+Or the old deprecated syntax of:
+<UL>
+	<LI>http://SERVER/auth-cgi-bin/cgiwrap?user=USER&script=SCRIPT
+</UL>
+
+<H3>Other Options</H3>
+With certain other web servers, the above syntax can sometimes be 
+shortened depending on how the local administrator has set up the server. 
+For example, some site support a URL syntax similar some of the following:
+<UL>
+	<LI>http://SERVER/~USER/SCRIPT.cgi
+	<LI>http://SERVER/cgi-bin/~USER/SCRIPT
+	<LI>http://SERVER/cgiwrap/~USER/SCRIPT
+	<LI>http://SERVER/~USER/cgi-bin/SCRIPT.cgi
+</UL>
+The administrator can look at the <A HREF="tricks.html">tricks</A> 
+document for some ideas on configuring the server.
+<P>
+<H3>Notes</H3>
+The syntax examples above using <TT>user=</TT> and <TT>script=</TT> are 
+carryovers from the original versions of CGIwrap, and are not really 
+needed. I <B>highly</B> reccomend you don't use them, the other examples 
+are much clearer and easier to use.
+

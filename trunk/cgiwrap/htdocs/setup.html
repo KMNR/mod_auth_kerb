@@ -1,0 +1,55 @@
+<TITLE>CGIWrap - User Instructions</TITLE>
+<CENTER><H2>CGIWrap - User Instructions</H2></CENTER>
+<HR><P>
+
+The following are instructions for setting up your account to be able to
+use cgiwrap to execute cgi scripts. It is assumed that you are familiar
+with writing CGI scripts and writing HTML documents for the WWW. 
+
+<P>
+In the following instructions, the following information is assumed:
+<UL>
+	<LI>UserID: <TT>joe</TT>
+	<LI>Home Directory: <TT>/users/joe</TT>
+	<LI>CGI Directory: <TT>/users/joe/public_html/cgi-bin</TT>
+	<LI>Name of Script: <TT>script.pl</TT>
+	<LI>Web Server: <TT>www.domain.com</TT>
+</UL>
+<P> 
+
+If you do not already have a cgi-bin directory set up, create one:
+<UL>
+	<LI>cd ~joe
+	<LI>mkdir public_html
+	<LI>mkdir public_html/cgi-bin
+</UL>
+
+<P>If you are using AFS, you will need to set the AFS permissions on the 
+directories. See <A HREF="afs.html">Use of CGIwrap with AFS</A> for 
+details on the necessary permissions.
+
+<P>Install the script into the cgi-bin directory, and set the proper execution 
+permissions on the file.
+<UL>
+	<LI><TT>cp script.pl ~joe/public_html/cgi-bin/script.pl</TT>
+	<LI><TT>chmod 755 ~joe/public_html/cgi-bin/script.pl</TT>
+</UL>
+
+<P>The script is executed using the following URL:
+<UL>
+	<LI><TT>http://www.domain.com/cgi-bin/cgiwrap/joe/script.pl</TT>
+</UL>
+
+<P>If you wish to see debugging output for your CGI, specify <B>cgiwrapd</B>
+instead of <B>cgiwrap</B>, as in the following URL:
+<UL>
+	<LI><TT>http://www.domain.com/cgi-bin/cgiwrapd/joe/script.pl</TT>
+</UL>
+
+<P>If the script is an <TT>nph-</TT> style script, you will need to run 
+it using the following URL's:
+<UL>
+	<LI><TT>http://www.domain.com/cgi-bin/nph-cgiwrap/joe/script.pl</TT>
+	<LI><TT>http://www.domain.com/cgi-bin/nph-cgiwrapd/joe/script.pl</TT>
+</UL>
+
