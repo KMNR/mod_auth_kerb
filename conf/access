@@ -1,0 +1,13 @@
+#
+# Access Control Rules for Repository:
+#
+# If this file is not present or empty, world rw access is granted.
+# Please allow a couple minutes for changes to take effect on
+# the server.
+#
+# Format:
+# /path<tab>user=perms
+# /path<tab>@group=perms
+# /path is the relative path in repository, such as / or /trunk or /trunk/some/dir
+# perms can be r or rw, anything else is invalid
+
