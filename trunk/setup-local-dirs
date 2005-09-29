@@ -55,6 +55,9 @@ while ( $file = readdir(DIR) )
 
 		print "Updating scripts for /local/$file.\n";
 		&setup_scripts("/local/$file");
+
+		print "Removing any existing local-modules dir.\n";
+		&mysystem("rm -rf $dir/local-modules");
 	}
 }
 
