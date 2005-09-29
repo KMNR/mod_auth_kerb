@@ -1,6 +1,20 @@
 #!/usr/bin/perl
 $| = 1;
 
+# Make sure we are running the most current code
+if ( $ARGV[0] ne "--skip-svn" )
+{
+	my @tmp1 = stat("/local/apache/setup-local-dirs");
+	chdir("/local/apache");
+	system("svn update");
+	my @tmp2 = stat("/local/apache/setup-local-dirs");
+	if ( $tmp1[9] != $tmp2[9] )
+	{
+		print "Restarting update script, file changed.\n";
+		exec( "/local/apache/update-local-dirs", "--skip-svn" );
+	}
+}
+
 opendir( DIR, "/local" );
 while ( $file = readdir(DIR) )
 {
