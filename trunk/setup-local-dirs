@@ -1,11 +1,13 @@
 #!/usr/bin/perl
 $| = 1;
 
+print "Scanning for local apache directories to update...\n";
+
 # Make sure we are running the most current code
 if ( $ARGV[0] ne "--skip-svn" )
 {
 	my @tmp1 = stat("/local/apache/setup-local-dirs");
-	chdir("/local/apache");
+	chdir("/local/apache") || die "failed to switch to /local/apache";
 	system("svn update");
 	my @tmp2 = stat("/local/apache/setup-local-dirs");
 	if ( $tmp1[9] != $tmp2[9] )
@@ -71,7 +73,8 @@ sub fix_perms
 	&mysystem("chown root:root $dir/logs/pidfile");
 	&mysystem("chmod -R go-rwx $dir");
 
-	if ( glob("$dir/*cgi*") )
+	my @pats = glob("$dir/*cgi*");
+	if ( $#pats >= 0 )
 	{
 		&mysystem("chmod -R go+rx $dir/*cgi*");
 	}
