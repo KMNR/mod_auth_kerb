@@ -1,0 +1,13 @@
+#!/bin/sh -x
+for f in conf.*cgi*; do
+        echo $f
+	mkdir -p objdir.$f
+	cd objdir.$f
+	gmake distclean
+        ../$f
+	gmake -j
+        gmake install
+	cd ..
+	echo `date` `pwd` $f >> /umr/.s/cgiwrap/known-builds/`umr_fqdn`
+done
+

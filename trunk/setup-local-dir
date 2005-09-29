@@ -1,0 +1,146 @@
+#!/usr/bin/perl
+$| = 1;
+
+opendir(DIR, "/local");
+while ( $file = readdir(DIR) )
+{
+	if ( $file eq "apache-root" || $file =~ /apache-root-.*/ )
+	{
+		if ( ! -e "/local/$file/conf/httpd.conf" )
+		{
+			print "$file must not be a server install, no httpd.conf\n";
+			next;
+		}
+
+		$user = undef;
+		open(IN, "/local/$file/conf/httpd.conf");
+		while ( $line = <IN> )
+		{
+			if ( $line =~ /User\s+(.*?)\s*$/o )
+			{
+				$user = $1;
+			}
+		}
+		close(IN);
+	
+		if ( $user eq "" )
+		{
+			die "Unable to determine user for /local/$file.\n";
+		}
+
+		print "Overwriting common config files in /local/$file/conf.\n";
+		system("cp -v /local/apache/conf/* /local/$file/conf/");
+
+		print "Fixing perms for /local/$file for user $user.\n";
+		&fix_perms("/local/$file", $user);
+
+		print "Updating scripts for /local/$file.\n";
+		&setup_scripts("/local/$file");
+	}
+}
+
+sub mysystem
+{
+	my ($cmd) = @_;
+	print "+ $cmd\n";
+	system($cmd);
+}
+
+sub fix_perms
+{
+	my ($dir, $user) = @_;
+
+&mysystem("chown -R root:root $dir");
+&mysystem("chown -R $user:root $dir/logs");
+&mysystem("chown -R $user:root $dir/htdocs*");
+&mysystem("chown root:root $dir/logs");
+&mysystem("chown root:root $dir/logs/pidfile");
+&mysystem("chmod -R go-rwx $dir");
+&mysystem("chmod -R go+rx $dir/*cgi*");
+
+&mysystem("chown -R $user:root $dir/rpc");
+
+&mysystem("chmod go+x $dir");
+&mysystem("chmod go+x $dir/logs");
+
+if ( -e "$dir/phpa-cache" )
+{
+if ( $user eq "" ) { die "Cannot set phpa permissions, no user specified.\n"; }
+&mysystem("chown -R $user $dir/phpa-cache");
+}
+}
+
+
+sub setup_scripts
+{
+	my ($dir) = @_;
+
+#
+# First start
+#
+	unlink("$dir/start");
+	open(OUT, ">$dir/start");
+	print OUT "#!/bin/sh\n";
+	print OUT "TZ=CST6CDT\n";
+	print OUT "export TZ\n\n";
+	print OUT "cd $dir\n";
+	print OUT "echo Starting Apache in $dir\n";
+	if ( -e "$dir/phpa-cache" )
+	{
+		print OUT "touch $dir/phpa-cache/TMP\n";
+		print OUT "rm -f $dir/phpa-cache/*\n";
+	}
+	print OUT "/usr/sbin/httpd -d $dir\n";
+	close(OUT);
+	&mysystem("chmod 700 $dir/start");
+
+#
+# And stop
+#
+	unlink("$dir/stop");
+	open(OUT, ">$dir/stop");
+	print OUT "#!/bin/sh\n";
+	print OUT "cd $dir\n";
+	print OUT "if [ -e logs/pidfile ]; then\n";
+	print OUT "echo Stopping Apache in $dir with pid \`cat logs/pidfile\`\n";
+	if ( -e "$dir/phpa-cache" )
+	{
+		print OUT "touch $dir/phpa-cache/TMP\n";
+		print OUT "rm -f $dir/phpa-cache/*\n";
+	}
+	print OUT "touch $dir/logs/TMP\n";
+	print OUT "kill \`cat logs/pidfile\`\n";
+	print OUT "sleep 2\n";
+	print OUT "fi\n";
+	print OUT "rm -f $dir/logs/TMP $dir/logs/httpd.mm.* $dir/logs/ssl_mutex* $dir/logs/ssl_scache*\n";
+	close(OUT);
+	&mysystem("chmod 700 $dir/stop");
+
+#
+# And restart
+#
+	unlink("$dir/restart");
+	open(OUT, ">$dir/restart");
+	print OUT "#!/bin/sh\n";
+	print OUT "cd $dir\n";
+	print OUT "./stop\n";
+	print OUT "sleep 1\n";
+	print OUT "./start\n";
+	close(OUT);
+	&mysystem("chmod 700 $dir/restart");
+
+#
+# And reload
+#
+	unlink("$dir/reload");
+	open(OUT, ">$dir/reload");
+	print OUT "#!/bin/sh\n";
+	print OUT "cd $dir\n";
+	print OUT "if [ -e logs/pidfile ]; then\n";
+	print OUT "echo Reloading Apache in $dir with pid \`cat logs/pidfile\`\n";
+	print OUT "kill -HUP \`cat logs/pidfile\`\n";
+	print OUT "fi\n";
+	close(OUT);
+	&mysystem("chmod 700 $dir/reload");
+
+}
