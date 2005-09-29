@@ -10,4 +10,4 @@
 # /path<tab>@group=perms
 # /path is the relative path in repository, such as / or /trunk or /trunk/some/dir
 # perms can be r or rw, anything else is invalid
-
+/ *=r
