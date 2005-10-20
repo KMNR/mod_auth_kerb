@@ -1,4 +1,4 @@
-/umr/s/cgiwrap/cgiwrap-cvs/configure \
+/local/apache/cgiwrap/configure \
 --with-local-contact-name="IT Solutions Center" \
 --with-local-site-url="http://campus.umr.edu/" \
 --with-local-contact-url="https://help.umr.edu/" \
