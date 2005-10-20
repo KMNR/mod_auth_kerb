@@ -1,0 +1,21 @@
+/umr/s/cgiwrap/cgiwrap-cvs/configure \
+--with-local-contact-name="IT Solutions Center" \
+--with-local-site-url="http://campus.umr.edu/" \
+--with-local-contact-url="https://help.umr.edu/" \
+--with-local-contact-phone="(573)341-HELP" \
+--without-check-owner \
+--without-check-group \
+--without-host-checking \
+--with-logging-syslog=cgiwrap \
+--without-check-group-writable \
+--without-check-world-writable \
+--without-check-symlink \
+--with-report-rusage \
+--with-setenv-tz=CST6CDT \
+--with-afs \
+--with-gcc-wall \
+--with-php=/usr/bin/php \
+--with-php-interpreter \
+--with-php-nonexec-only \
+--with-allow-deny-netgroups \
+--with-rlimit-cpu=60 $*
