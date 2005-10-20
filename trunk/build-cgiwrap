@@ -8,6 +8,5 @@ for f in conf.*cgi*; do
 	gmake -j
         gmake install
 	cd ..
-	echo `date` `pwd` $f >> /umr/.s/cgiwrap/known-builds/`umr_fqdn`
 done
 
