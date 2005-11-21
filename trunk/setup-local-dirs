@@ -93,13 +93,16 @@ sub fix_perms
 	&mysystem("chmod go+x $dir");
 	&mysystem("chmod go+x $dir/logs");
 
-	if ( -e "$dir/phpa-cache" )
+	foreach my $otherdir ( "phpa-cache", "sessions" )
 	{
-		if ( $user eq "" )
+		if ( -e "$dir/$otherdir" )
 		{
-			die "Cannot set phpa permissions, no user specified.\n";
+			if ( $user eq "" )
+			{
+				die "Cannot set $otherdir permissions, no user specified.\n";
+			}
+			&mysystem("chown -R $user:$user $dir/$otherdir");
 		}
-		&mysystem("chown -R $user:$user $dir/phpa-cache");
 	}
 }
 
