@@ -12,7 +12,6 @@
 --without-check-symlink \
 --with-report-rusage \
 --with-setenv-tz=CST6CDT \
---with-afs \
 --with-gcc-wall \
 --with-php=/usr/bin/php \
 --with-php-interpreter \
