@@ -1547,7 +1547,7 @@ test -n "$target_alias" &&
           ac_config_headers="$ac_config_headers config.h"
 
 
-VERSION="3.9"
+VERSION="3.10"
 
 
 ac_ext=c
