@@ -1,25 +1,31 @@
-/.cvsignore/1.4/Sun Apr 27 18:55:41 2003//
-/COPYING/1.1/Thu Apr 29 20:38:10 1999//
-/Makefile.in/1.21/Tue Sep 13 14:17:06 2005//
-/README/1.14/Sun Jul 22 17:22:07 2001//
-/cgiwrap.c/1.50/Thu Sep  1 18:32:27 2005//
-/cgiwrap.h/1.25/Thu Sep  1 18:32:27 2005//
-/config.guess/1.2/Sun Nov 16 21:53:00 1997//
-/config.h.in/1.30/Fri Oct 24 14:54:09 2003//
-/config.sub/1.2/Sun Nov 16 21:53:01 1997//
-/configure.in/1.49/Tue Sep 13 14:17:07 2005//
-/debug.c/1.9/Thu Sep  1 18:32:27 2005//
-/debug.h/1.9/Thu Sep  1 18:32:27 2005//
-/depend.awk/1.1/Sun Jan 25 04:15:43 1998//
-/fetch.c/1.14/Thu Sep  1 18:32:27 2005//
-/fetch.h/1.6/Thu Sep  1 18:32:27 2005//
-/getusershell.c/1.2/Thu Sep 23 00:48:14 2004//
-/install-sh/1.1/Sun Nov 16 21:57:58 1997//
-/make-docs/1.2/Tue Jul  8 17:42:25 2003//
-/msgs.c/1.22/Thu Sep  1 18:32:27 2005//
-/msgs.h/1.15/Thu Sep  1 18:32:27 2005//
-/stdutil.c/1.14/Thu Sep  1 18:32:27 2005//
-/stdutil.h/1.5/Thu Sep  1 18:32:27 2005//
-/util.c/1.76/Thu Sep  1 18:32:27 2005//
-/util.h/1.24/Thu Sep  1 18:32:27 2005//
-D
+D/.config////
+D/RCS////
+D/U////
+D/doc////
+D/htdocs////
+D/unsup////
+/.cvsignore/1.4/Tue Oct 25 16:30:15 2005//
+/COPYING/1.1/Tue Oct 25 16:30:15 2005//
+/Makefile.in/1.21/Tue Oct 25 16:30:15 2005//
+/README/1.14/Tue Oct 25 16:30:15 2005//
+/cgiwrap.c/1.50/Tue Oct 25 16:30:15 2005//
+/cgiwrap.h/1.25/Tue Oct 25 16:30:15 2005//
+/config.guess/1.3/Fri Feb 17 16:57:21 2006//
+/config.h.in/1.30/Tue Oct 25 16:30:15 2005//
+/config.sub/1.3/Fri Feb 17 16:57:21 2006//
+/configure.in/1.50/Fri Feb 17 16:57:21 2006//
+/debug.c/1.9/Tue Oct 25 16:30:15 2005//
+/debug.h/1.9/Tue Oct 25 16:30:15 2005//
+/depend.awk/1.1/Tue Oct 25 16:30:15 2005//
+/fetch.c/1.14/Tue Oct 25 16:30:15 2005//
+/fetch.h/1.6/Tue Oct 25 16:30:15 2005//
+/getusershell.c/1.2/Tue Oct 25 16:30:15 2005//
+/install-sh/1.1/Tue Oct 25 16:30:15 2005//
+/make-docs/1.2/Tue Oct 25 16:30:15 2005//
+/msgs.c/1.22/Tue Oct 25 16:30:15 2005//
+/msgs.h/1.15/Tue Oct 25 16:30:15 2005//
+/regen.sh/1.1/Mon Feb 13 14:21:24 2006//
+/stdutil.c/1.14/Tue Oct 25 16:30:15 2005//
+/stdutil.h/1.5/Tue Oct 25 16:30:15 2005//
+/util.c/1.76/Tue Oct 25 16:30:15 2005//
+/util.h/1.24/Tue Oct 25 16:30:15 2005//
