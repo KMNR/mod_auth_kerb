@@ -11,6 +11,7 @@
 --without-check-world-writable \
 --without-check-symlink \
 --with-report-rusage \
+--without-nph \
 --with-cgiwrapd \
 --with-setenv-tz=CST6CDT \
 --with-gcc-wall \
