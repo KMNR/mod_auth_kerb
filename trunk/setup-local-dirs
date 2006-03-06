@@ -118,6 +118,21 @@ sub setup_scripts
 	print OUT "#!/bin/sh\n";
 	print OUT "TZ=CST6CDT\n";
 	print OUT "export TZ\n\n";
+
+	my $using_mod_perl = 0;
+	open(IN, "$dir/conf/httpd.conf");
+	while ( chomp($line = <IN>) )
+	{
+		if ( $line =~ /LoadModule.*mod_perl/o )
+		{
+			$using_mod_perl = 1;
+		}
+	}
+	if ( $using_mod_perl )
+	{
+		print OUT "export LD_PRELOAD=/usr/oracle/lib/libclntsh.so\n\n";
+	}
+
 	print OUT "cd $dir\n";
 	print OUT "echo Starting Apache in $dir\n";
 
