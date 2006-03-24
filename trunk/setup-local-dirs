@@ -119,7 +119,6 @@ sub setup_scripts
 	print OUT "TZ=CST6CDT\n";
 	print OUT "export TZ\n\n";
 
-	print OUT "export LANG=C\n\n";
 
 	my $using_mod_perl = 0;
 	open(IN, "$dir/conf/httpd.conf");
@@ -132,7 +131,10 @@ sub setup_scripts
 	}
 	if ( $using_mod_perl )
 	{
-		print OUT "export LD_PRELOAD=/usr/oracle/lib/libclntsh.so\n\n";
+		print OUT "export LD_PRELOAD=/usr/oracle/lib/libclntsh.so\n";
+		print OUT "export LANG=C\n";
+		print OUT "export NLS_LANG=AMERICAN_AMERICA.UTF8\n";
+		print OUT "\n";
 	}
 
 	print OUT "cd $dir\n";
