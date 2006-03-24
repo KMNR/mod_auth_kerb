@@ -119,6 +119,8 @@ sub setup_scripts
 	print OUT "TZ=CST6CDT\n";
 	print OUT "export TZ\n\n";
 
+	print OUT "export LANG=C\n\n";
+
 	my $using_mod_perl = 0;
 	open(IN, "$dir/conf/httpd.conf");
 	while ( chomp($line = <IN>) )
