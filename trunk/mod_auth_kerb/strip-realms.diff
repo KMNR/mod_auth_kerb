@@ -1,0 +1,84 @@
+Index: src/mod_auth_kerb.c
+===================================================================
+RCS file: /cvsroot/modauthkerb/mod_auth_kerb/src/Attic/mod_auth_kerb.c,v
+retrieving revision 1.108
+diff -u -r1.108 mod_auth_kerb.c
+--- src/mod_auth_kerb.c	9 Mar 2005 12:27:26 -0000	1.108
++++ src/mod_auth_kerb.c	13 Apr 2005 15:31:33 -0000
+@@ -126,6 +126,7 @@
+  ***************************************************************************/
+ typedef struct {
+ 	char *krb_auth_realms;
++	char *krb_strip_realms;
+ 	int krb_save_credentials;
+ 	int krb_verify_kdc;
+ 	char *krb_service_name;
+@@ -149,6 +150,9 @@
+ static const char*
+ krb5_save_realms(cmd_parms *cmd, kerb_auth_config *sec, const char *arg);
+ 
++static const char*
++krb5_strip_realms(cmd_parms *cmd, kerb_auth_config *sec, const char *arg);
++
+ #ifdef STANDARD20_MODULE_STUFF
+ #define command(name, func, var, type, usage)           \
+   AP_INIT_ ## type (name, (void*) func,                 \
+@@ -168,6 +172,12 @@
+    command("KrbAuthRealm", krb5_save_realms, krb_auth_realms,
+      RAW_ARGS, "Alias for KrbAuthRealms."),
+ 
++   command("KrbStripRealms", krb5_strip_realms, krb_strip_realms,
++     RAW_ARGS, "Realms to strip from authentication userid."),
++
++   command("KrbStripRealm", krb5_strip_realms, krb_strip_realms,
++     RAW_ARGS, "Alias for KrbStripRealms."),
++
+    command("KrbSaveCredentials", ap_set_flag_slot, krb_save_credentials,
+      FLAG, "Save and store credentials/tickets retrieved during auth."),
+ 
+@@ -298,6 +308,13 @@
+    return NULL;
+ }
+ 
++static const char*
++krb5_strip_realms(cmd_parms *cmd, kerb_auth_config *sec, const char *arg)
++{
++   sec->krb_strip_realms= ap_pstrdup(cmd->pool, arg);
++   return NULL;
++}
++
+ void log_rerror(const char *file, int line, int level, int status,
+                 const request_rec *r, const char *fmt, ...)
+ {
+@@ -966,6 +983,31 @@
+    ret = OK;
+ 
+ end:
++   if (ret == OK) { 
++      realms = conf->krb_strip_realms;
++      do {
++         char *rp;
++       
++         if (realms && (realm = ap_getword_white(r->pool, &realms))) {
++            char *rp = strchr(MK_USER, '@');
++            if ( rp && !strcmp(realm, "*") ) {
++               *rp = '\0';
++               break;
++            }
++            else if (rp && !strcasecmp(rp + 1, realm)) {
++               *rp = '\0';
++               break;
++            }
++            else if ( !rp ) {
++               break;
++            }
++         }
++
++         /* ap_getword_white() used above shifts the parameter, so it's not
++            needed to touch the realms variable */
++      } while (realms && *realms);
++   } 
++
+    log_rerror(APLOG_MARK, APLOG_DEBUG, 0, r,
+ 	      "kerb_authenticate_user_krb5pwd ret=%d user=%s authtype=%s",
+ 	      ret, (MK_USER)?MK_USER:"(NULL)", (MK_AUTH_TYPE)?MK_AUTH_TYPE:"(NULL)");
