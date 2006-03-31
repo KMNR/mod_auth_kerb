@@ -1,0 +1,24 @@
+#!/usr/bin/perl
+$| = 1;
+
+print "Scanning for local apache directories to reload...\n";
+
+opendir( DIR, "/local" );
+while ( $file = readdir(DIR) )
+{
+	if ( $file eq "apache-root" || $file =~ /apache-root-.*/ )
+	{
+		if ( !-e "/local/$file/reload" )
+		{
+			&mysystem("/local/$file/reload");
+		}
+	}
+}
+closedir(DIR);
+
+sub mysystem
+{
+	my ($cmd) = @_;
+	print "+ $cmd\n";
+	system($cmd);
+}
