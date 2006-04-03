@@ -8,7 +8,6 @@
 --without-host-checking \
 --with-logging-syslog=cgiwrap \
 --without-check-group-writable \
---without-check-world-writable \
 --without-check-symlink \
 --with-report-rusage \
 --without-nph \
