@@ -1,0 +1,34 @@
+APXS = @APXS@
+KRB5_CPPFLAGS = @KRB5_CPPFLAGS@
+KRB5_LDFLAGS = @KRB5_LDFLAGS@
+KRB4_CPPFLAGS = @KRB4_CPPFLAGS@
+KRB4_LDFLAGS = @KRB4_LDFLAGS@
+LIB_resolv = @LIB_resolv@
+SPNEGO_SRCS = @SPNEGO_SRCS@
+
+CPPFLAGS = -I. -Ispnegokrb5 $(KRB5_CPPFLAGS) $(KRB4_CPPFLAGS) $(DEFS)
+LDFLAGS = $(KRB5_LDFLAGS) $(KRB4_LDFLAGS) $(LIB_resolv)
+CFLAGS =
+
+APXS_CPPFLAGS = ${shell [ -n "${CPPFLAGS}" ] && echo ${CPPFLAGS} | sed -e 's/\([^ ]*\)/-Wc,\1/g'}
+APXS_LDFLAGS  = ${shell [ -n "${LDFLAGS}"  ] && echo ${LDFLAGS} | sed -e 's/\([^ ]*\)/-Wl,\1/g'}
+
+all: src/mod_auth_kerb.so
+
+src/mod_auth_kerb.so: src/mod_auth_kerb.c $(SPNEGO_SRCS)
+	$(APXS) -c $(APXS_CPPFLAGS) $(APXS_CFLAGS) $(APXS_LDFLAGS) src/mod_auth_kerb.c $(SPNEGO_SRCS)
+
+install:
+	$(APXS) -c -i $(APXS_CPPFLAGS) $(APXS_CFLAGS) $(APXS_LDFLAGS) src/mod_auth_kerb.c $(SPNEGO_SRCS)
+
+clean:
+	for i in . src spnegokrb5; do \
+		$(RM) $$i/*.{o,so,a,la,lo,slo} core; \
+		$(RM) -rf $$i/.libs; \
+	done
+
+distclean: clean
+	$(RM) config.h config.status Makefile config.log
+	$(RM) -rf autom4te.cache
+
+.PHONY: all install clean distclean
