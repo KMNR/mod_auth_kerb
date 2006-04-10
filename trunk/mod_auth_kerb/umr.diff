@@ -1,6 +1,6 @@
 diff -x .svn -ur -h mod_auth_kerb-5.0rc7-orig/src/mod_auth_kerb.c mod_auth_kerb-5.0rc7/src/mod_auth_kerb.c
 --- mod_auth_kerb-5.0rc7-orig/src/mod_auth_kerb.c	2006-02-28 17:01:44.000000000 -0600
-+++ mod_auth_kerb-5.0rc7/src/mod_auth_kerb.c	2006-04-10 18:37:49.000000000 -0500
++++ mod_auth_kerb-5.0rc7/src/mod_auth_kerb.c	2006-04-10 18:55:32.000000000 -0500
 @@ -149,6 +149,7 @@
   ***************************************************************************/
  typedef struct {
@@ -32,21 +32,37 @@ diff -x .svn -ur -h mod_auth_kerb-5.0rc7-orig/src/mod_auth_kerb.c mod_auth_kerb-
     command("KrbSaveCredentials", ap_set_flag_slot, krb_save_credentials,
       FLAG, "Save and store credentials/tickets retrieved during auth."),
  
-@@ -333,6 +343,13 @@
-    return NULL;
- }
- 
+@@ -329,7 +339,29 @@
+ krb5_save_realms(cmd_parms *cmd, void *vsec, const char *arg)
+ {
+    kerb_auth_config *sec = (kerb_auth_config *) vsec;
++
++/*
++if this says ALL-UM-SYSTEM, use this compiled in default list
++*/
++
++   if ( !strcmp(arg, "UMSYSTEM") )
++   {
++   sec->krb_auth_realms= ap_pstrdup(cmd->pool, 
++	"UMR.EDU COL.MISSOURI.EDU TIG.MIZZOU.EDU UM.UMSYSTEM.EDU "
++	"UMAC.UMSYSTEM.EDU UMH.EDU KC.UMKC.EDU UMAD.UMSYSTEM.EDU "
++	"STL.UMSL.EDU");
++   }
++   else
++   {
+    sec->krb_auth_realms= ap_pstrdup(cmd->pool, arg);
++   }
++   return NULL;
++}
++
 +static const char*
 +krb5_strip_realms(cmd_parms *cmd, kerb_auth_config *sec, const char *arg)
 +{
 +   sec->krb_strip_realms= ap_pstrdup(cmd->pool, arg);
-+   return NULL;
-+}
-+
- static void
- log_rerror(const char *file, int line, int level, int status,
-            const request_rec *r, const char *fmt, ...)
-@@ -1019,6 +1036,31 @@
+    return NULL;
+ }
+ 
+@@ -1019,6 +1051,31 @@
     ret = OK;
  
  end:

@@ -339,7 +339,22 @@ static const char*
 krb5_save_realms(cmd_parms *cmd, void *vsec, const char *arg)
 {
    kerb_auth_config *sec = (kerb_auth_config *) vsec;
+
+/*
+if this says ALL-UM-SYSTEM, use this compiled in default list
+*/
+
+   if ( !strcmp(arg, "UMSYSTEM") )
+   {
+   sec->krb_auth_realms= ap_pstrdup(cmd->pool, 
+	"UMR.EDU COL.MISSOURI.EDU TIG.MIZZOU.EDU UM.UMSYSTEM.EDU "
+	"UMAC.UMSYSTEM.EDU UMH.EDU KC.UMKC.EDU UMAD.UMSYSTEM.EDU "
+	"STL.UMSL.EDU");
+   }
+   else
+   {
    sec->krb_auth_realms= ap_pstrdup(cmd->pool, arg);
+   }
    return NULL;
 }
 
