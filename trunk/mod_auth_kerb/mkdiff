@@ -1,0 +1,1 @@
+diff -x .svn -ur mod_auth_kerb-5.0rc7-orig mod_auth_kerb-5.0rc7 -h | grep -v "Only in" > umr.diff

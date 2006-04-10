@@ -1,21 +1,17 @@
-Index: src/mod_auth_kerb.c
-===================================================================
-RCS file: /cvsroot/modauthkerb/mod_auth_kerb/src/Attic/mod_auth_kerb.c,v
-retrieving revision 1.108
-diff -u -r1.108 mod_auth_kerb.c
---- src/mod_auth_kerb.c	9 Mar 2005 12:27:26 -0000	1.108
-+++ src/mod_auth_kerb.c	13 Apr 2005 15:31:33 -0000
-@@ -126,6 +126,7 @@
+diff -x .svn -ur -h mod_auth_kerb-5.0rc7-orig/src/mod_auth_kerb.c mod_auth_kerb-5.0rc7/src/mod_auth_kerb.c
+--- mod_auth_kerb-5.0rc7-orig/src/mod_auth_kerb.c	2006-02-28 17:01:44.000000000 -0600
++++ mod_auth_kerb-5.0rc7/src/mod_auth_kerb.c	2006-04-10 18:37:49.000000000 -0500
+@@ -149,6 +149,7 @@
   ***************************************************************************/
  typedef struct {
  	char *krb_auth_realms;
 +	char *krb_strip_realms;
  	int krb_save_credentials;
  	int krb_verify_kdc;
- 	char *krb_service_name;
-@@ -149,6 +150,9 @@
+ 	const char *krb_service_name;
+@@ -175,6 +176,9 @@
  static const char*
- krb5_save_realms(cmd_parms *cmd, kerb_auth_config *sec, const char *arg);
+ krb5_save_realms(cmd_parms *cmd, void *sec, const char *arg);
  
 +static const char*
 +krb5_strip_realms(cmd_parms *cmd, kerb_auth_config *sec, const char *arg);
@@ -23,7 +19,7 @@ diff -u -r1.108 mod_auth_kerb.c
  #ifdef STANDARD20_MODULE_STUFF
  #define command(name, func, var, type, usage)           \
    AP_INIT_ ## type (name, (void*) func,                 \
-@@ -168,6 +172,12 @@
+@@ -194,6 +198,12 @@
     command("KrbAuthRealm", krb5_save_realms, krb_auth_realms,
       RAW_ARGS, "Alias for KrbAuthRealms."),
  
@@ -36,7 +32,7 @@ diff -u -r1.108 mod_auth_kerb.c
     command("KrbSaveCredentials", ap_set_flag_slot, krb_save_credentials,
       FLAG, "Save and store credentials/tickets retrieved during auth."),
  
-@@ -298,6 +308,13 @@
+@@ -333,6 +343,13 @@
     return NULL;
  }
  
@@ -47,10 +43,10 @@ diff -u -r1.108 mod_auth_kerb.c
 +   return NULL;
 +}
 +
- void log_rerror(const char *file, int line, int level, int status,
-                 const request_rec *r, const char *fmt, ...)
- {
-@@ -966,6 +983,31 @@
+ static void
+ log_rerror(const char *file, int line, int level, int status,
+            const request_rec *r, const char *fmt, ...)
+@@ -1019,6 +1036,31 @@
     ret = OK;
  
  end:
