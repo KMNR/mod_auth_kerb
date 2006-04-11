@@ -347,8 +347,13 @@ if this says ALL-UM-SYSTEM, use this compiled in default list
    if ( !strcmp(arg, "UMSYSTEM") )
    {
    sec->krb_auth_realms= ap_pstrdup(cmd->pool, 
-	"UMR.EDU UMSYSTEM.EDU MISSOURI.EDU MIZZOU.EDU UM.UMSYSTEM.EDU "
-	"UMH.EDU UMKC.EDU UMSL.EDU");
+	"UMR.EDU COL.MISSOURI.EDU TIG.MIZZOU.EDU UM.UMSYSTEM.EDU "
+	"UMAC.UMSYSTEM.EDU KC.UMKC.EDU UMAD.UMSYSTEM.EDU "
+	"STL.UMSL.EDU");
+
+/* leave out UMH.EDU, it takes forever to time out since their servers are
+   not accessible */
+
    }
    else
    {
