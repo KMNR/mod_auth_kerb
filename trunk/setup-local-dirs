@@ -131,10 +131,10 @@ sub setup_scripts
 	}
 	if ( $using_mod_perl )
 	{
-		print OUT "export LD_PRELOAD=/usr/oracle/lib/libclntsh.so\n";
-		print OUT "export LANG=C\n";
-		print OUT "export NLS_LANG=AMERICAN_AMERICA.UTF8\n";
-		print OUT "\n";
+#		print OUT "export LD_PRELOAD=/usr/oracle/lib/libclntsh.so\n";
+#		print OUT "export LANG=C\n";
+#		print OUT "export NLS_LANG=AMERICAN_AMERICA.UTF8\n";
+#		print OUT "\n";
 	}
 
 	print OUT "cd $dir\n";
