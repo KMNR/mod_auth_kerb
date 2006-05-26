@@ -93,7 +93,7 @@ sub fix_perms
 	&mysystem("chmod go+x $dir");
 	&mysystem("chmod go+x $dir/logs");
 
-	foreach my $otherdir ( "phpa-cache", "sessions" )
+	foreach my $otherdir ( "sessions" )
 	{
 		if ( -e "$dir/$otherdir" )
 		{
@@ -140,12 +140,6 @@ sub setup_scripts
 
 	print OUT "cd $dir\n";
 	print OUT "echo Starting Apache in $dir\n";
-
-	if ( -e "$dir/phpa-cache" )
-	{
-		print OUT "touch $dir/phpa-cache/TMP\n";
-		print OUT "rm -f $dir/phpa-cache/*\n";
-	}
 	print OUT "/usr/sbin/httpd -d $dir\n";
 	close(OUT);
 	&mysystem("chmod 700 $dir/start");
@@ -159,11 +153,6 @@ sub setup_scripts
 	print OUT "cd $dir\n";
 	print OUT "if [ -e logs/pidfile ]; then\n";
 	print OUT "echo Stopping Apache in $dir with pid \`cat logs/pidfile\`\n";
-	if ( -e "$dir/phpa-cache" )
-	{
-		print OUT "touch $dir/phpa-cache/TMP\n";
-		print OUT "rm -f $dir/phpa-cache/*\n";
-	}
 	print OUT "touch $dir/logs/TMP\n";
 	print OUT "kill \`cat logs/pidfile\`\n";
 	print OUT "sleep 2\n";
