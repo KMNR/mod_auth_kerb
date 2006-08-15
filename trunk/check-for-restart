@@ -1,0 +1,53 @@
+#!/usr/bin/perl
+$| = 1;
+
+print "Scanning for local apache directories to restart if needed...\n";
+
+opendir( DIR, "/local" );
+while ( $file = readdir(DIR) )
+{
+	if ( $file eq "apache-root" || $file =~ /apache-root-.*/ )
+	{
+		if ( -e "/local/$file/reload" )
+		{
+			&check_dir("/local/$file");
+		}
+	}
+}
+closedir(DIR);
+
+sub mysystem
+{
+	my ($cmd) = @_;
+	print "+ $cmd\n";
+	system($cmd);
+}
+
+sub check_dir
+{
+	my $dir          = shift;
+	my $need_restart = 0;
+
+	foreach my $file ( "error_log.today", "error_log" )
+	{
+		open( IN, "$dir/logs/$file" );
+		while ( $line = <IN> )
+		{
+			if ( $line = /Segmentation fault/o )
+			{
+				$need_restart = 1;
+			}
+			elsif ( $line =~ /resuming normal operations/o )
+			{
+				$need_restart = 0;
+			}
+		}
+		close(IN);
+	}
+
+	if ($need_restart)
+	{
+		system("$dir/restart");
+	}
+}
+
