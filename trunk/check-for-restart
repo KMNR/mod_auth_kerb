@@ -49,6 +49,13 @@ sub check_dir
 	{
 		print "Restarting apache in $dir - segfault detected in logs.\n";
 		system("$dir/restart");
+
+		chomp($hostname = `hostname`);
+		open(OUT, "|/usr/bin/sendmail -fsysmon\@umr.edu -t");
+		print OUT "To: nneul\@umr.edu, esigler\@umr.edu\n";
+		print OUT "Subject: Restarting apache in $dir on $hostname\n";
+		print OUT "\n";
+		close(OUT);
 	}
 }
 
