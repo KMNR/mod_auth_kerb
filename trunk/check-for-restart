@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 $| = 1;
 
-print "Scanning for local apache directories to restart if needed...\n";
+#print "Scanning for local apache directories to restart if needed...\n";
 
 opendir( DIR, "/local" );
 while ( $file = readdir(DIR) )
@@ -33,7 +33,7 @@ sub check_dir
 		open( IN, "$dir/logs/$file" );
 		while ( $line = <IN> )
 		{
-			if ( $line = /Segmentation fault/o )
+			if ( $line =~ /Segmentation fault/o )
 			{
 				$need_restart = 1;
 			}
@@ -47,6 +47,7 @@ sub check_dir
 
 	if ($need_restart)
 	{
+		print "Restarting apache in $dir - segfault detected in logs.\n";
 		system("$dir/restart");
 	}
 }
