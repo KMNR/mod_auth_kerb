@@ -8,7 +8,7 @@ while ( $file = readdir(DIR) )
 {
 	if ( $file eq "apache-root" || $file =~ /apache-root-.*/ )
 	{
-		if ( -e "/local/$file/reload" )
+		if ( -e "/local/$file/restart" )
 		{
 			&mysystem("/local/$file/restart");
 		}
