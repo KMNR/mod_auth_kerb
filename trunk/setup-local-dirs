@@ -61,6 +61,22 @@ while ( $file = readdir(DIR) )
 	}
 }
 
+unlink("/home/local/adm/rc-start/rc.500.httpd");
+open(OUT, ">/home/local/adm/rc-start/rc.500.httpd");
+print OUT "#!/bin/sh\n";
+print OUT "/local/apache/stop-all\n";
+print OUT "/local/apache/start-all\n";
+close(OUT);
+system("chmod 755 /home/local/adm/rc-start/rc.500.httpd");
+
+unlink("/home/local/adm/rc-stop/rc.500.httpd");
+open(OUT, ">/home/local/adm/rc-stop/rc.500.httpd");
+print OUT "#!/bin/sh\n";
+print OUT "/local/apache/stop-all\n";
+close(OUT);
+system("chmod 755 /home/local/adm/rc-stop/rc.500.httpd");
+
+
 sub mysystem
 {
 	my ($cmd) = @_;
