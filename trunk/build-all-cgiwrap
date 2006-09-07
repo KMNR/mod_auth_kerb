@@ -12,9 +12,11 @@ while ( $file = readdir(DIR) )
 	{
 		if ( -e "/local/$file/cgiwrap" )
 		{
+			print "Building in /local/$file/cgiwrap:\n";
 			chdir("/local/$file/cgiwrap") || next;
 			&mysystem("/local/apache/build-cgiwrap");
 			chdir("/");
+			print "\n\n";
 		}
 	}
 }
