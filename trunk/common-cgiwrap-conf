@@ -18,6 +18,6 @@
 --with-php-interpreter \
 --with-php-nonexec-only \
 --with-allow-deny-netgroups \
---without-setgroups \
+--without-initgroups \
 --with-rlimit-cpu=60 \
 $*
