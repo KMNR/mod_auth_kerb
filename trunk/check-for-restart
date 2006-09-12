@@ -35,10 +35,18 @@ sub check_dir
 		{
 			if ( $line =~ /Segmentation fault/o )
 			{
+				if ( $need_restart != 1 )
+				{
+					#print "Found segfault indicator in $dir/logs/$file.\n";
+				}
 				$need_restart = 1;
 			}
 			elsif ( $line =~ /resuming normal operations/o )
 			{
+				if ( $need_restart != 0 )
+				{
+					#print "Found restart indicator in $dir/logs/$file.\n";
+				}
 				$need_restart = 0;
 			}
 		}
@@ -51,7 +59,7 @@ sub check_dir
 		system("$dir/restart");
 
 		chomp($hostname = `hostname`);
-		open(OUT, "|/usr/bin/sendmail -fsysmon\@umr.edu -t");
+		open(OUT, "|/usr/sbin/sendmail -fsysmon\@umr.edu -t");
 		print OUT "To: nneul\@umr.edu, esigler\@umr.edu\n";
 		print OUT "Subject: Restarting apache in $dir on $hostname\n";
 		print OUT "\n";
