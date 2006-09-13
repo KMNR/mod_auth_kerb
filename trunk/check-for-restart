@@ -53,10 +53,28 @@ sub check_dir
 		close(IN);
 	}
 
+	if ( -e "$dir/logs/pidfile" )
+	{
+		my $pid;
+		open(IN, "$dir/logs/pidfile");
+		chomp($pid = <IN>);
+
+		if ( kill(0, $pid) == 0 )
+		{
+			$need_restart = 1;
+		}
+	}
+	else
+	{
+		$need_restart = 1;
+	}
+
 	if ($need_restart)
 	{
 		print "Restarting apache in $dir - segfault detected in logs.\n";
-		system("$dir/restart");
+		system("$dir/stop");
+		sleep(4);
+		system("$dir/start");
 
 		chomp($hostname = `hostname`);
 		open(OUT, "|/usr/sbin/sendmail -fsysmon\@umr.edu -t");
