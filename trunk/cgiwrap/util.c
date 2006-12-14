@@ -23,7 +23,7 @@
  **/ 
 
 #include "cgiwrap.h"	/* Headers for all CGIwrap source files */
-RCSID("$Id: util.c,v 1.76 2005/09/01 18:32:27 nneul Exp $");
+RCSID("$Id: util.c 296 2006-10-23 13:10:33Z nneul $");
 
 /*
  * Encode string to protect against cross-site scripting, but only
@@ -987,7 +987,12 @@ void SetResourceLimits(void)
 	for (i=0; cgiwrap_rlimits[i].label; i++)
 	{
 		limstruct.rlim_cur = cgiwrap_rlimits[i].value;
+
+#if defined(CONF_SOFT_RLIMIT_ONLY)
+		limstruct.rlim_max = RLIM_INFINITY;
+#else
 		limstruct.rlim_max = cgiwrap_rlimits[i].value;
+#endif
 
 		sprintf(msg, "Limiting (%s) to (%ld)\n", 
 			cgiwrap_rlimits[i].label,
@@ -1354,7 +1359,8 @@ void SetScriptName(char *userStr, char *scrStr )
 		name = getenv("PATH_INFO");
 		if ( name ) {
 			/* We need to strip PATH_INFO from REDIRECT_URL */
-			len = strlen(redurl) - strlen(name);
+            /* this code doesn't appear to be completely implemented */
+			len = strlen(redurl);
 			buf = (char*) SafeMalloc (strlen("SCRIPT_NAME=") +
 		    		len + 2,
 				"new SCRIPT_NAME environment variable");

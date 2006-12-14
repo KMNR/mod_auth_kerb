@@ -17,7 +17,7 @@
  *
  */
 
-/* rcsid: $Id: util.h,v 1.24 2005/09/01 18:32:27 nneul Exp $ */
+/* rcsid: $Id: util.h 285 2005-09-01 18:32:27Z nneul $ */
 
 /**
  **  File: util.h

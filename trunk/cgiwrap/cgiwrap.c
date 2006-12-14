@@ -23,7 +23,7 @@
  **/ 
 
 #include "cgiwrap.h"	/* Headers for all CGIwrap source files */
-RCSID("$Id: cgiwrap.c,v 1.50 2005/09/01 18:32:27 nneul Exp $");
+RCSID("$Id: cgiwrap.c 297 2006-12-14 16:47:23Z nneul $");
 
 /*
  * Global context structure
@@ -175,6 +175,19 @@ int main (int argc, char *argv[])
 
 	DEBUG_Str("\tScript Relative Path: ", scrStr);
 	DEBUG_Str("\tScript Absolute Path: ", scriptPath);
+
+#if defined(CONF_BLOCK_SVN_PATHS)
+    if ( strstr(scriptPath, "/.svn/") )
+    {
+        MSG_Error_ExecutionNotPermitted(scriptPath, "Script is located in .svn directory.");
+    }
+#endif
+#if defined(CONF_BLOCK_CVS_PATHS)
+    if ( strstr(scriptPath, "/CVS/") )
+    {
+        MSG_Error_ExecutionNotPermitted(scriptPath, "Script is located in CVS directory.");
+    }
+#endif
 
 #if defined(CONF_PHP_INTERPRETER) && defined(PATH_PROG_PHP)
 	DEBUG_Msg("\tChecking for special interpreted script (php).");

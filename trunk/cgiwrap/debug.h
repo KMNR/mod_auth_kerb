@@ -17,7 +17,7 @@
  *
  */
 
-/* rcsid: $Id: debug.h,v 1.9 2005/09/01 18:32:27 nneul Exp $ */
+/* rcsid: $Id: debug.h 285 2005-09-01 18:32:27Z nneul $ */
 
 /**
  **  File: debug.h

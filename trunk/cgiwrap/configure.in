@@ -5,7 +5,7 @@ AC_CONFIG_AUX_DIR(.)
 AC_CANONICAL_SYSTEM
 AC_CONFIG_HEADER(config.h)
 
-VERSION="3.10"
+VERSION="3.11"
 AC_SUBST(VERSION)
 
 AC_PROG_CC
@@ -143,6 +143,45 @@ AC_ARG_WITH( env-require-user,
 	[
 		AC_MSG_RESULT([disabled])
 	])
+
+dnl     
+dnl Block SVN paths for execution
+dnl 
+AC_MSG_CHECKING(for block-svn-paths)
+AC_ARG_WITH( block-svn-paths,
+    [  --with-block-svn-paths]
+    [  prevent execution of any script in a .svn dir],
+    [
+        if test "x$withval" != xno; then
+            AC_DEFINE(CONF_BLOCK_SVN_PATHS, [], [block execution of .svn paths])
+            AC_MSG_RESULT([enabled])
+        else
+            AC_MSG_RESULT([disabled])
+        fi
+    ],
+    [
+        AC_MSG_RESULT([disabled])
+    ])
+
+dnl     
+dnl Block CVS paths for execution
+dnl 
+AC_MSG_CHECKING(for block-cvs-paths)
+AC_ARG_WITH( block-cvs-paths,
+    [  --with-block-cvs-paths]
+    [  prevent execution of any script in a CVS dir],
+    [
+        if test "x$withval" != xno; then
+            AC_DEFINE(CONF_BLOCK_CVS_PATHS, [], [block execution of CVS paths])
+            AC_MSG_RESULT([enabled])
+        else
+            AC_MSG_RESULT([disabled])
+        fi
+    ],
+    [
+        AC_MSG_RESULT([disabled])
+    ])
+
 	
 dnl
 dnl Path to php for interpreter support
@@ -1042,7 +1081,6 @@ CGIWRAP_SETENV(ld_library_path,LD_LIBRARY_PATH,STRING,[lib search path])
 CGIWRAP_SETENV(path,PATH,STRING,[search path])
 CGIWRAP_SETENV(tz,TZ,STRING,[time zone])
 
-
 dnl
 dnl Resource limits for those who want to use them
 dnl
@@ -1085,7 +1123,24 @@ CGIWRAP_RLIMIT(nproc,NPROC,COUNT,[processes],32,[number of processes])
 CGIWRAP_RLIMIT(nofile,NOFILE,COUNT,[files],32,[number of open files])
 CGIWRAP_RLIMIT(memlock,MEMLOCK,BYTES,[bytes],2500000,[lockable memory])
 
-
+dnl
+dnl Check for php filename, and pass to php interpreter directly
+dnl
+AC_MSG_CHECKING(for soft-rlimit-only support)
+AC_ARG_WITH( soft-rlimit-only,
+        [  --with-soft-rlimit-only]
+        [  set soft rlimits only],
+        [
+                if test "x$withval" != xno; then
+                        AC_DEFINE(CONF_SOFT_RLIMIT_ONLY, [], [will only set soft resource limits])
+                        AC_MSG_RESULT([will only set soft resource limits])
+                else
+                        AC_MSG_RESULT([will set both hard and soft resource limits])
+                fi
+        ],
+        [
+                AC_MSG_RESULT([will set both hard and soft resource limits])
+        ])
 
 
 dnl

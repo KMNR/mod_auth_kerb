@@ -23,7 +23,7 @@
  **/ 
 
 #include "cgiwrap.h"	/* Headers for all CGIwrap source files */
-RCSID("$Id: msgs.c,v 1.22 2005/09/01 18:32:27 nneul Exp $");
+RCSID("$Id: msgs.c 285 2005-09-01 18:32:27Z nneul $");
 
 /* 
  * Mode to output the message - plaintext or HTML

@@ -17,7 +17,7 @@
  *
  */
 
-/* rcsid: $Id: stdutil.h,v 1.5 2005/09/01 18:32:27 nneul Exp $ */
+/* rcsid: $Id: stdutil.h 285 2005-09-01 18:32:27Z nneul $ */
 
 
 #if !defined(HAS_STRDUP)

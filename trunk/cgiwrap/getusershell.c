@@ -18,7 +18,7 @@
  */
 
 #if defined(LIBC_SCCS) && !defined(lint)
-static char sccsid[] = "@(#)$Id: getusershell.c,v 1.2 2004/09/23 00:48:14 nneul Exp $";
+static char sccsid[] = "@(#)$Id: getusershell.c 280 2004-09-23 00:48:14Z nneul $";
 
 #endif /* LIBC_SCCS and not lint */
 

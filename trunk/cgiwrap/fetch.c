@@ -23,7 +23,7 @@
  **/ 
 
 #include "cgiwrap.h"	/* Headers for all CGIwrap source files */
-RCSID("$Id: fetch.c,v 1.14 2005/09/01 18:32:27 nneul Exp $");
+RCSID("$Id: fetch.c 285 2005-09-01 18:32:27Z nneul $");
 
 char *FetchUserString(void)
 {

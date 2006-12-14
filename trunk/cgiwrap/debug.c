@@ -23,7 +23,7 @@
  **/ 
 
 #include "cgiwrap.h"	/* Headers for all CGIwrap source files */
-RCSID("$Id: debug.c,v 1.9 2005/09/01 18:32:27 nneul Exp $");
+RCSID("$Id: debug.c 285 2005-09-01 18:32:27Z nneul $");
 
 /*
  * Global flag to turn debugging output on/off

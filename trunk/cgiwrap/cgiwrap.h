@@ -17,7 +17,7 @@
  *
  */
 
-/* rcsid: $Id: cgiwrap.h,v 1.25 2005/09/01 18:32:27 nneul Exp $ */
+/* rcsid: $Id: cgiwrap.h 285 2005-09-01 18:32:27Z nneul $ */
 
 /*
  * Quiet warning about rcsid

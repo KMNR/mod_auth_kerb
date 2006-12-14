@@ -17,7 +17,7 @@
  *
  */
 
-/* rcsid: $Id: fetch.h,v 1.6 2005/09/01 18:32:27 nneul Exp $ */
+/* rcsid: $Id: fetch.h 285 2005-09-01 18:32:27Z nneul $ */
 
 /**
  **  File: fetch.h

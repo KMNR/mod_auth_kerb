@@ -17,7 +17,7 @@
  *
  */
 
-/* rcsid: $Id: msgs.h,v 1.15 2005/09/01 18:32:27 nneul Exp $ */
+/* rcsid: $Id: msgs.h 285 2005-09-01 18:32:27Z nneul $ */
 
 /**
  **  File: messages.h

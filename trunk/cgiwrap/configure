@@ -859,6 +859,10 @@ Optional Packages:
 	  allow overriding HTTP_HOST with CGIWRAP_AUTH_VHOST
   --with-env-require-user
 	  allow specifying CGIWRAP_REQUIRE_USER in env to restrict to specific userid
+  --with-block-svn-paths
+      prevent execution of any script in a .svn dir
+  --with-block-cvs-paths
+      prevent execution of any script in a CVS dir
   --with-php=PATH
 	  path to php executable to use
   --with-asp=PATH
@@ -973,6 +977,8 @@ Optional Packages:
           limit number of open files with setrlimit
   --with-rlimit-memlock=BYTES  (2500000)
           limit lockable memory with setrlimit
+  --with-soft-rlimit-only
+          set soft rlimits only
   --with-allow-file=FILE  (/usr/adm/cgiwrap.allow)
 	  limit cgiwrap usage
   --with-deny-file=FILE  (/usr/adm/cgiwrap.deny)
@@ -2735,6 +2741,61 @@ else
 echo "${ECHO_T}disabled" >&6
 
 fi;
+
+echo "$as_me:$LINENO: checking for block-svn-paths" >&5
+echo $ECHO_N "checking for block-svn-paths... $ECHO_C" >&6
+
+# Check whether --with-block-svn-paths or --without-block-svn-paths was given.
+if test "${with_block_svn_paths+set}" = set; then
+  withval="$with_block_svn_paths"
+
+        if test "x$withval" != xno; then
+
+cat >>confdefs.h <<\_ACEOF
+#define CONF_BLOCK_SVN_PATHS
+_ACEOF
+
+            echo "$as_me:$LINENO: result: enabled" >&5
+echo "${ECHO_T}enabled" >&6
+        else
+            echo "$as_me:$LINENO: result: disabled" >&5
+echo "${ECHO_T}disabled" >&6
+        fi
+
+else
+
+        echo "$as_me:$LINENO: result: disabled" >&5
+echo "${ECHO_T}disabled" >&6
+
+fi;
+
+echo "$as_me:$LINENO: checking for block-cvs-paths" >&5
+echo $ECHO_N "checking for block-cvs-paths... $ECHO_C" >&6
+
+# Check whether --with-block-cvs-paths or --without-block-cvs-paths was given.
+if test "${with_block_cvs_paths+set}" = set; then
+  withval="$with_block_cvs_paths"
+
+        if test "x$withval" != xno; then
+
+cat >>confdefs.h <<\_ACEOF
+#define CONF_BLOCK_CVS_PATHS
+_ACEOF
+
+            echo "$as_me:$LINENO: result: enabled" >&5
+echo "${ECHO_T}enabled" >&6
+        else
+            echo "$as_me:$LINENO: result: disabled" >&5
+echo "${ECHO_T}disabled" >&6
+        fi
+
+else
+
+        echo "$as_me:$LINENO: result: disabled" >&5
+echo "${ECHO_T}disabled" >&6
+
+fi;
+
 
 
 # Check whether --with-php or --without-php was given.
@@ -6496,7 +6557,6 @@ fi;
 
 
 
-
 	echo "$as_me:$LINENO: checking for limit rlimit-cpu" >&5
 echo $ECHO_N "checking for limit rlimit-cpu... $ECHO_C" >&6
 
@@ -6926,7 +6986,32 @@ echo "${ECHO_T}none" >&6
 fi;
 
 
+echo "$as_me:$LINENO: checking for soft-rlimit-only support" >&5
+echo $ECHO_N "checking for soft-rlimit-only support... $ECHO_C" >&6
 
+# Check whether --with-soft-rlimit-only or --without-soft-rlimit-only was given.
+if test "${with_soft_rlimit_only+set}" = set; then
+  withval="$with_soft_rlimit_only"
+
+                if test "x$withval" != xno; then
+
+cat >>confdefs.h <<\_ACEOF
+#define CONF_SOFT_RLIMIT_ONLY
+_ACEOF
+
+                        echo "$as_me:$LINENO: result: will only set soft resource limits" >&5
+echo "${ECHO_T}will only set soft resource limits" >&6
+                else
+                        echo "$as_me:$LINENO: result: will set both hard and soft resource limits" >&5
+echo "${ECHO_T}will set both hard and soft resource limits" >&6
+                fi
+
+else
+
+                echo "$as_me:$LINENO: result: will set both hard and soft resource limits" >&5
+echo "${ECHO_T}will set both hard and soft resource limits" >&6
+
+fi;
 
 
 
