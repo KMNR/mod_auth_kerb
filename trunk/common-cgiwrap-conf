@@ -6,6 +6,8 @@
 --without-check-owner \
 --without-check-group \
 --without-host-checking \
+--with-block-svn-paths \
+--with-block-cvs-paths \
 --with-logging-syslog=cgiwrap \
 --without-check-group-writable \
 --without-check-symlink \
