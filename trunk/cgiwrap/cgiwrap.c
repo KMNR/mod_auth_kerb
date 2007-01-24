@@ -23,7 +23,7 @@
  **/ 
 
 #include "cgiwrap.h"	/* Headers for all CGIwrap source files */
-RCSID("$Id: cgiwrap.c 297 2006-12-14 16:47:23Z nneul $");
+RCSID("$Id: cgiwrap.c 298 2007-01-24 16:58:04Z nneul $");
 
 /*
  * Global context structure
@@ -203,6 +203,18 @@ int main (int argc, char *argv[])
 		{
 			Context.interpreted_script = 1;
 			interPath = PATH_PROG_PHP;
+		}
+	}
+#endif
+#if defined(CONF_ERUBY_INTERPRETER) && defined(PATH_PROG_ERUBY)
+	DEBUG_Msg("\tChecking for special interpreted script (eRuby).");
+	if ( ! interPath )
+	{
+
+		if ( StringEndsWith(scriptPath, ".rhtml") )
+		{
+			Context.interpreted_script = 1;
+			interPath = PATH_PROG_ERUBY;
 		}
 	}
 #endif
