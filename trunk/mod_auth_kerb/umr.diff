@@ -1,7 +1,7 @@
-diff -x .svn -ur -h mod_auth_kerb-5.0rc7-orig/src/mod_auth_kerb.c mod_auth_kerb-5.0rc7/src/mod_auth_kerb.c
---- mod_auth_kerb-5.0rc7-orig/src/mod_auth_kerb.c	2006-02-28 17:01:44.000000000 -0600
-+++ mod_auth_kerb-5.0rc7/src/mod_auth_kerb.c	2006-04-10 18:55:32.000000000 -0500
-@@ -149,6 +149,7 @@
+diff -x .svn -ur mod_auth_kerb-5.3-orig/src/mod_auth_kerb.c mod_auth_kerb-5.3/src/mod_auth_kerb.c
+--- mod_auth_kerb-5.3-orig/src/mod_auth_kerb.c	2006-11-22 04:32:58.000000000 -0600
++++ mod_auth_kerb-5.3/src/mod_auth_kerb.c	2007-08-12 13:38:40.000000000 -0500
+@@ -153,6 +153,7 @@
   ***************************************************************************/
  typedef struct {
  	char *krb_auth_realms;
@@ -9,7 +9,7 @@ diff -x .svn -ur -h mod_auth_kerb-5.0rc7-orig/src/mod_auth_kerb.c mod_auth_kerb-
  	int krb_save_credentials;
  	int krb_verify_kdc;
  	const char *krb_service_name;
-@@ -175,6 +176,9 @@
+@@ -179,6 +180,9 @@
  static const char*
  krb5_save_realms(cmd_parms *cmd, void *sec, const char *arg);
  
@@ -19,7 +19,7 @@ diff -x .svn -ur -h mod_auth_kerb-5.0rc7-orig/src/mod_auth_kerb.c mod_auth_kerb-
  #ifdef STANDARD20_MODULE_STUFF
  #define command(name, func, var, type, usage)           \
    AP_INIT_ ## type (name, (void*) func,                 \
-@@ -194,6 +198,12 @@
+@@ -198,6 +202,12 @@
     command("KrbAuthRealm", krb5_save_realms, krb_auth_realms,
       RAW_ARGS, "Alias for KrbAuthRealms."),
  
@@ -32,37 +32,40 @@ diff -x .svn -ur -h mod_auth_kerb-5.0rc7-orig/src/mod_auth_kerb.c mod_auth_kerb-
     command("KrbSaveCredentials", ap_set_flag_slot, krb_save_credentials,
       FLAG, "Save and store credentials/tickets retrieved during auth."),
  
-@@ -329,7 +339,29 @@
+@@ -333,6 +343,32 @@
  krb5_save_realms(cmd_parms *cmd, void *vsec, const char *arg)
  {
     kerb_auth_config *sec = (kerb_auth_config *) vsec;
 +
 +/*
-+if this says ALL-UM-SYSTEM, use this compiled in default list
++ if this says UMSYSTEM, use this compiled in default list
 +*/
-+
++ 
 +   if ( !strcmp(arg, "UMSYSTEM") )
 +   {
-+   sec->krb_auth_realms= ap_pstrdup(cmd->pool, 
-+	"UMR.EDU COL.MISSOURI.EDU TIG.MIZZOU.EDU UM.UMSYSTEM.EDU "
-+	"UMAC.UMSYSTEM.EDU UMH.EDU KC.UMKC.EDU UMAD.UMSYSTEM.EDU "
-+	"STL.UMSL.EDU");
++    sec->krb_auth_realms= apr_pstrdup(cmd->pool, 
++   "MST.EDU UMR.EDU COL.MISSOURI.EDU TIG.MIZZOU.EDU UM.UMSYSTEM.EDU "
++   "UMAC.UMSYSTEM.EDU KC.UMKC.EDU UMAD.UMSYSTEM.EDU "
++   "STL.UMSL.EDU");
++ 
++/* leave out UMH.EDU, it takes forever to time out since their servers are
++   not accessible */
++
 +   }
 +   else
 +   {
-    sec->krb_auth_realms= ap_pstrdup(cmd->pool, arg);
++   sec->krb_auth_realms= apr_pstrdup(cmd->pool, arg);
 +   }
 +   return NULL;
 +}
-+
++ 
 +static const char*
 +krb5_strip_realms(cmd_parms *cmd, kerb_auth_config *sec, const char *arg)
 +{
-+   sec->krb_strip_realms= ap_pstrdup(cmd->pool, arg);
+    sec->krb_auth_realms= apr_pstrdup(cmd->pool, arg);
     return NULL;
  }
- 
-@@ -1019,6 +1051,31 @@
+@@ -1016,6 +1052,31 @@
     ret = OK;
  
  end:

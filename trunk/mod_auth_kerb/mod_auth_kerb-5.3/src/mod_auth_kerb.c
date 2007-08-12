@@ -153,6 +153,7 @@ module auth_kerb_module;
  ***************************************************************************/
 typedef struct {
 	char *krb_auth_realms;
+	char *krb_strip_realms;
 	int krb_save_credentials;
 	int krb_verify_kdc;
 	const char *krb_service_name;
@@ -179,6 +180,9 @@ set_kerb_auth_headers(request_rec *r, const kerb_auth_config *conf,
 static const char*
 krb5_save_realms(cmd_parms *cmd, void *sec, const char *arg);
 
+static const char*
+krb5_strip_realms(cmd_parms *cmd, kerb_auth_config *sec, const char *arg);
+
 #ifdef STANDARD20_MODULE_STUFF
 #define command(name, func, var, type, usage)           \
   AP_INIT_ ## type (name, (void*) func,                 \
@@ -197,6 +201,12 @@ static const command_rec kerb_auth_cmds[] = {
 
    command("KrbAuthRealm", krb5_save_realms, krb_auth_realms,
      RAW_ARGS, "Alias for KrbAuthRealms."),
+
+   command("KrbStripRealms", krb5_strip_realms, krb_strip_realms,
+     RAW_ARGS, "Realms to strip from authentication userid."),
+
+   command("KrbStripRealm", krb5_strip_realms, krb_strip_realms,
+     RAW_ARGS, "Alias for KrbStripRealms."),
 
    command("KrbSaveCredentials", ap_set_flag_slot, krb_save_credentials,
      FLAG, "Save and store credentials/tickets retrieved during auth."),
@@ -333,7 +343,33 @@ static const char*
 krb5_save_realms(cmd_parms *cmd, void *vsec, const char *arg)
 {
    kerb_auth_config *sec = (kerb_auth_config *) vsec;
+
+/*
+ if this says UMSYSTEM, use this compiled in default list
+*/
+ 
+   if ( !strcmp(arg, "UMSYSTEM") )
+   {
+    sec->krb_auth_realms= apr_pstrdup(cmd->pool, 
+   "MST.EDU UMR.EDU COL.MISSOURI.EDU TIG.MIZZOU.EDU UM.UMSYSTEM.EDU "
+   "UMAC.UMSYSTEM.EDU KC.UMKC.EDU UMAD.UMSYSTEM.EDU "
+   "STL.UMSL.EDU");
+ 
+/* leave out UMH.EDU, it takes forever to time out since their servers are
+   not accessible */
+
+   }
+   else
+   {
    sec->krb_auth_realms= apr_pstrdup(cmd->pool, arg);
+   }
+   return NULL;
+}
+ 
+static const char*
+krb5_strip_realms(cmd_parms *cmd, kerb_auth_config *sec, const char *arg)
+{
+   sec->krb_strip_realms= apr_pstrdup(cmd->pool, arg);
    return NULL;
 }
 
@@ -1016,6 +1052,31 @@ authenticate_user_krb5pwd(request_rec *r,
    ret = OK;
 
 end:
+   if (ret == OK) { 
+      realms = conf->krb_strip_realms;
+      do {
+         char *rp;
+       
+         if (realms && (realm = ap_getword_white(r->pool, &realms))) {
+            char *rp = strchr(MK_USER, '@');
+            if ( rp && !strcmp(realm, "*") ) {
+               *rp = '\0';
+               break;
+            }
+            else if (rp && !strcasecmp(rp + 1, realm)) {
+               *rp = '\0';
+               break;
+            }
+            else if ( !rp ) {
+               break;
+            }
+         }
+
+         /* ap_getword_white() used above shifts the parameter, so it's not
+            needed to touch the realms variable */
+      } while (realms && *realms);
+   } 
+
    log_rerror(APLOG_MARK, APLOG_DEBUG, 0, r,
 	      "kerb_authenticate_user_krb5pwd ret=%d user=%s authtype=%s",
 	      ret, (MK_USER)?MK_USER:"(NULL)", (MK_AUTH_TYPE)?MK_AUTH_TYPE:"(NULL)");
