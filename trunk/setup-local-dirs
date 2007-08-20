@@ -50,6 +50,10 @@ while ( $file = readdir(DIR) )
 		print "Overwriting common config files in /local/$file/conf.\n";
 		system("cp -v /local/apache/conf/* /local/$file/conf/");
 
+		print "Updating CA chain.crt file.\n";
+		system("mkdir -p /local/$file/ssl");
+		system("cp -v /local/apache/ssl/chain.crt /local/$file/ssl/");
+
 		print "Fixing perms for /local/$file for user $user.\n";
 		&fix_perms( "/local/$file", $user );
 
