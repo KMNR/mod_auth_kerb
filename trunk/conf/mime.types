@@ -490,3 +490,17 @@ video/x-msvideo			avi
 video/x-sgi-movie		movie
 x-conference/x-cooltalk		ice
 type=application/x-java-jnlp-file desc="Java Web Start" exts="jnlp"
+
+#
+# Added UMR mime types, above should be a verbatim copy of /etc/mime.types
+# from base RHEL install
+#
+video/x-ms-asf asf asx
+audio/x-ms-wma wma
+audio/x-ms-wax wax
+video/x-ms-wmv wmv
+video/x-ms-wvx wvx
+video/x-ms-wm wm
+video/x-ms-wmx wmx
+application/x-ms-wmz wmz
+application/x-ms-wmd wmd
