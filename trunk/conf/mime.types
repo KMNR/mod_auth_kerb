@@ -504,3 +504,6 @@ video/x-ms-wm wm
 video/x-ms-wmx wmx
 application/x-ms-wmz wmz
 application/x-ms-wmd wmd
+
+# Added for SVG support
+image/svg+xml svg
