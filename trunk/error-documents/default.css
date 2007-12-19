@@ -1,0 +1,509 @@
+body { 
+	background: white;  
+	color: Black;  
+	 margin: -10px 0 0 -10px;  /* For most versions of NN.4.x */
+}
+
+html body { 
+	margin: 0; padding: 0; /* For CSS-compliant browsers */
+} 
+
+form {
+	margin: 0px;
+	padding: 0px;
+	display: inline;
+}
+
+table {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+th, td {
+	font-family: verdana, helvetica, arial, sans-serif;
+	font-size: 12px;
+}
+
+h1{
+	background: #369;
+	color: #FFF;
+	font-size: 16px;
+	font-family:  arial, verdana, helvetica, sans-serif;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	padding-left: 6px;
+	padding-right:6px;
+}
+
+th {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+h2 {
+	background: #369;
+	color: #FFF;
+	font-size: 14px;
+	font-family:  arial, verdana, helvetica, sans-serif;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-left: 3px;
+}
+
+h3 {
+	font-size: 13px;
+	font-weight: bold;
+}
+
+/* header styles */
+.first-green {
+	background: #9c3;
+	color: #fff;
+}
+
+td.left-col {
+	background: #DFEAF6;
+	color: #9c3;
+}
+
+/* left float around image */
+.left-float {
+	float: left;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+/* formatting for left navigation column */
+.left-nav {
+	background: #369;
+	vertical-align: top;
+	color: #9c3;
+	font-family:  arial, verdana, helvetica, sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	width:142px;
+}
+
+.left-nav a {
+	display:block;
+	padding-left: 8px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.left-nav a:link {
+	color:#9c3;
+	text-decoration: none;
+	background: transparent;
+}
+
+.left-nav a:visited {
+	color: #9c3;
+	text-decoration: none;
+	background: transparent;
+}
+
+.left-nav a:hover {
+	color:#CF0;
+	text-decoration: none;
+	background: #036;
+}
+
+.left-nav a:active {
+	background: #036;
+	color: #CF0;
+}
+
+.list {
+	margin-left: 10px;
+}
+
+.sub-list {
+	margin-left: 10px;
+}
+
+.sub-sub-list {
+	margin-left: 10px;
+}
+
+
+.secondary-content {
+	vertical-align: top;
+   padding-left: 10px;
+   padding-right: 10px;
+	width:441px;
+}
+
+.secondary-main {
+	font-size: 12px;
+	font-family: verdana, helvetica, arial, sans-serif;
+	padding: 5px;
+}
+
+.secondary-main ul li {
+	line-height: 20px;
+	list-style-image: none;
+	list-style-type: none;
+}
+
+.secondary-top {
+	font-size: 12px;
+	font-family: verdana, helvetica, arial, sans-serif;
+	padding: 5px;
+	font-weight: bold;
+}
+
+.red {
+	color:red;
+}
+
+/* formatting for the far right column */
+
+.right-text {
+	background: transparent;
+	color: black;
+	padding-left: 7px;
+	font-size: 10px;
+	font-family: verdana, helvetica, arial, sans-serif;
+}
+
+/*formatting for second column from the right */
+
+.second-right-text {
+	background: transparent;
+	color: black;
+	padding-top: 3px;
+	padding-left: 7px;
+	padding-right: 7px;
+	padding-bottom: 3px;
+	font-size: 11px;
+	font-family: verdana, helvetica, arial, sans-serif;
+}
+
+.second-left-text {
+	background: transparent;
+	color: black;
+	padding-left: 7px;
+	padding-right: 7px;
+	padding-bottom: 3px;
+	font-size: 11px;
+	font-family: verdana, helvetica, arial, sans-serif;
+	margin-top: 0px;
+}
+
+.second-left-bigger {
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.smaller {
+	font-size: 10px;
+}
+
+.top {
+	font-size: 10px;
+}
+
+/* set image to block style display */
+.block {
+	display:block;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+
+.dir-search {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 12px;
+	font-family: verdana, helvetica, arial, sans-serif;	
+}
+
+.dir-search p {
+	text-align: center;
+	font-weight: bold;
+}
+
+.dir-search ul li {   
+	margin-left: 10%;
+	list-style-type: none;
+	line-height: 18px; 
+}
+
+/*set background color for global nav cell */
+.glob-nav {
+	background: #090;
+	color: #fff;
+}
+
+.update {
+	font-size: 9px;
+	width: 140px;
+}
+
+.update1 {
+	font-size: 10px;
+	width: 140px;
+}
+
+/* setup footer div attributes */
+#footer {
+	background: white;
+	color: Gray;
+	font-size: 10px;
+	font-family: verdana, helvetica, arial, sans-serif;
+	font-style: italic;
+	text-align: right;
+	padding-top: 10px;
+	width: 608px;
+}
+
+/* text navigation styles */
+#text-nav {
+	font-size: 10px;
+	font-family:verdana, helvetica, arial, sans-serif;
+	color: Gray;
+	padding-bottom: 5px;
+	padding-right: 5px;
+	padding-left: 5px;
+	padding-top: 5px;
+	text-align: center;
+	background:white;
+}
+
+#text-nav a:link {
+	color: #036;
+	text-decoration: none;
+	background:white;
+}
+
+#text-nav a:visited {
+	text-decoration: none;
+}
+
+#text-nav a:hover {
+	color: blue;
+	text-decoration: underline;
+	background: #ccc;
+}
+
+/* border outlines & dimensions on containers */
+#spotlight {
+	width: 300px;
+	margin-bottom: 5px;
+	font-size: 11px;
+	font-family: Verdana,  Helvetica,  Arial, sans-serif;
+	padding-top: 3px;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 3px;
+}
+
+#remember {
+	width: 300px;
+	margin-left: 6px;
+	margin-right: 4px;
+	font-size: 11px;
+	vertical-align: top;
+	border: 1px solid #9cf;
+	background: #ebface;
+	color: black;
+}
+
+#remember p {
+	padding-left: 10px;
+}
+
+#events {
+	vertical-align: top;
+	margin-left: 5%;
+	font-weight: bold;
+	line-height: 18px;
+}
+
+#events ul li {
+	list-style: none;
+}
+
+#dates {
+	border: 1px solid #fc0;
+	width: 144px;
+	background: #FF9;
+	font-size: 11px;
+	color: black;
+	margin-bottom: 5px;
+	padding-bottom: 8px;
+}
+
+#helpdesk {
+	border: 1px solid #C00;
+	width: 142px;
+	padding-bottom: 5px;
+	padding-left:3px;
+	font-family: verdana, helvetica, arial, sans-serif;
+	margin-bottom: 5px;
+	background: #ffc;
+	color: black;
+}
+
+#helpdesk img {
+	margin-bottom:10px;
+}
+
+
+#helpdesk2 {
+	border: 2px solid #C00;
+	width: 148px;
+	margin-right: 4px;
+	margin-bottom: 5px;;
+	padding-bottom: 5px;
+	padding-left:3px;
+	font-family: verdana, helvetica, arial, sans-serif;
+}
+
+#helpdesk2 img {
+	margin-bottom:10px;
+}
+
+#weather {
+	border: 1px solid #036;
+	width:144px;
+	margin-bottom: 5px;
+}
+
+#search {
+	height: 20px;
+	font-size: 10px;
+	font-family: verdana, helvetica, arial, sans-serif;
+	font-weight: bold;
+	color: white;
+}
+
+#main1 {
+	border: 1px solid #036;
+	padding: 5px;
+	vertical-align: top;
+	margin-top: 0px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-bottom: 5px;
+}	
+
+#main1 h2 {
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-left:0px;
+}
+#main1 h3 {
+	margin-bottom: 2px;
+}
+
+#main1 a:link {
+	text-decoration: underline;
+	color: blue;
+}
+
+#main1 a:visited {
+	text-decoration: underline;
+	color: purple;
+}
+
+
+#main1 a:hover {
+	background: #ccc;
+	text-decoration: none;
+	color: blue;
+}
+
+
+#main2 {
+	border: 1px solid #036;
+	padding: 5px;
+	vertical-align: top;
+	margin-top: 0px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
+
+#main2 h2 {
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-left:0px;
+}
+#main2 h3 {
+	margin-bottom: 2px;
+}
+
+#main2 a:link {
+	text-decoration: underline;
+	color: blue;
+}
+
+#main2 a:visited {
+	text-decoration: underline;
+	color: purple;
+}
+
+
+#main2 a:hover {
+	background: #ccc;
+	text-decoration: none;
+	color: blue;
+}
+
+#campus1 {
+	display:block;
+	padding-bottom: 10px;
+
+}
+
+#question {
+	width: 144px;
+	border: 1px solid #39C;
+	background: #9cf;
+	color: black;
+}
+
+
+#spot-top {
+	margin-bottom: 10px;
+}
+
+#spacer {
+	border: 1px solid #dfeaf6;
+	width: 150px;
+	height: 290px;
+	margin-right: 4px;
+	margin-bottom: 5px;;
+	padding-bottom: 5px;
+	padding-left:3px;
+	font-family: verdana, helvetica, arial, sans-serif;
+	font-size: 11px;
+}
+
+#footerArea2{
+	font-family:Arial, Helvetica, sans-serif;
+	width:960px;
+	height:100px;
+	background-color:#FFFFFF;
+	text-align:center;
+	}
+
+#footerArea2 p{
+	color:#b3b3b3;
+	text-align:center;
+	vertical-align:top;
+	font-size:12px;
+	}
+
+#footerArea2 p a:link,#footerArea2 p a:visited{ 
+	color:#b3b3b3;
+	}
+	
+#footerArea2 p a:hover,#footerArea2 p a:active{ 
+	color:#b3b3b3;
+	}
+
