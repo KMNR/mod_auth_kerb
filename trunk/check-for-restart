@@ -77,8 +77,8 @@ sub check_dir
 		system("$dir/start");
 
 		chomp($hostname = `hostname`);
-		open(OUT, "|/usr/sbin/sendmail -fsysmon\@umr.edu -t");
-		print OUT "To: nneul\@umr.edu, esigler\@umr.edu\n";
+		open(OUT, "|/usr/sbin/sendmail -fsysmon\@mst.edu -t");
+		print OUT "To: nneul\@mst.edu, esigler\@mst.edu\n";
 		print OUT "Subject: Restarting apache in $dir on $hostname\n";
 		print OUT "\n";
 		close(OUT);

@@ -1,7 +1,7 @@
 /local/apache/cgiwrap/configure \
 --with-local-contact-name="IT Solutions Center" \
---with-local-site-url="http://campus.umr.edu/" \
---with-local-contact-url="https://help.umr.edu/" \
+--with-local-site-url="http://campus.mst.edu/" \
+--with-local-contact-url="https://help.mst.edu/" \
 --with-local-contact-phone="(573)341-HELP" \
 --without-check-owner \
 --without-check-group \
