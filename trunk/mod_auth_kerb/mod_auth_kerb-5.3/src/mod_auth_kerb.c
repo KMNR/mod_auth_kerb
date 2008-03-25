@@ -351,7 +351,7 @@ krb5_save_realms(cmd_parms *cmd, void *vsec, const char *arg)
    if ( !strcmp(arg, "UMSYSTEM") )
    {
     sec->krb_auth_realms= apr_pstrdup(cmd->pool, 
-   "MST.EDU UMR.EDU COL.MISSOURI.EDU TIG.MIZZOU.EDU UM.UMSYSTEM.EDU "
+   "MST.EDU COL.MISSOURI.EDU TIG.MIZZOU.EDU UM.UMSYSTEM.EDU "
    "UMAC.UMSYSTEM.EDU KC.UMKC.EDU UMAD.UMSYSTEM.EDU "
    "STL.UMSL.EDU");
  
