@@ -507,3 +507,12 @@ application/x-ms-wmd wmd
 
 # Added for SVG support
 image/svg+xml svg
+
+# Added 8/25 for Office 2007
+application/vnd.openxmlformats-officedocument.wordprocessingml.document docx
+application/vnd.openxmlformats-officedocument.wordprocessingml.template dotx
+application/vnd.openxmlformats-officedocument.presentationml.slideshow ppsx
+application/vnd.openxmlformats-officedocument.presentationml.presentation pptx
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet xlsx
+application/vnd.openxmlformats-officedocument.spreadsheetml.template xltx
+
