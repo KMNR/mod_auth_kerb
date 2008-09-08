@@ -5,7 +5,7 @@ AC_CONFIG_AUX_DIR(.)
 AC_CANONICAL_SYSTEM
 AC_CONFIG_HEADER(config.h)
 
-VERSION="3.11"
+VERSION="4.1"
 AC_SUBST(VERSION)
 
 AC_PROG_CC
@@ -252,6 +252,27 @@ AC_ARG_WITH( asp,
 			AC_DEFINE_UNQUOTED(PATH_PROG_ASP,"${PATH_PROG_ASP}", [path to asp executable to use])
 		fi
 	])
+
+
+dnl
+dnl Charset to use for error/text responses
+dnl
+charset="iso-8859-1"
+AC_MSG_CHECKING(for charset)
+AC_ARG_WITH( charset, 
+	[  --with-charset=charset]
+	[  charset to output in content-type header for cgiwrap output], 
+	[
+		if test "x$withval" != x; then
+			charset="$withval"
+		fi
+	],
+	[
+		true
+	])
+AC_MSG_RESULT($charset)
+AC_DEFINE_UNQUOTED(HTTP_CHARSET,"$charset", [charset])
+
 
 
 

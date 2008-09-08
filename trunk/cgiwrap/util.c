@@ -13,7 +13,7 @@
  *  along with CGIWrap; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2003-2005, Nathan Neulinger <nneul@umr.edu>
+ *  Copyright 2003-2005, Nathan Neulinger <nneul@neulinger.org>
  *
  */
 
@@ -23,7 +23,7 @@
  **/ 
 
 #include "cgiwrap.h"	/* Headers for all CGIwrap source files */
-RCSID("$Id: util.c 299 2007-01-24 17:02:01Z nneul $");
+RCSID("$Id: util.c 306 2008-06-13 14:02:02Z nneul $");
 
 /*
  * Encode string to protect against cross-site scripting, but only

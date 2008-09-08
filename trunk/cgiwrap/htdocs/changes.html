@@ -5,9 +5,19 @@ These are some of the changes that have occured in CGIWrap from version
 to version.
 
 <HR>
-<P><H3>New in version 3.11:</H3><UL>
+<P><H3>New in version 4.1:</H3><UL>
+	<LI>Added support for specifying a character set to use for cgiwrap output to address a vulnerability in how IE handles documents without a charset specified. The vulnerability allowed cross site scripting when cgiwrap URLs were accessed from a JA version of IE. To specify the charset to use, provide the "--with-charset=X" option to configure when building cgiwrap. It will default to iso-8859-1 if not specifically set.
+</UL>
+
+<HR>
+<P><H3>New in version 4.0:</H3><UL>
+	<LI>Bumped version number to 4.0 to deal with screwed up release numbering of earlier versions.
 	<LI>Added --with-soft-rlimits-only option based on patch from jplinderman@sf.net
 	<LI>Added --with-block-svn-paths and --with-block-cvs-paths options to prevent execution of files in those dirs.
+	<LI>Added --with-eruby-interpreter option from BlackSun, Inc.
+	<LI>Added support for setting SIGXCPU even when sigset unavailable - from BlackSun, Inc.
+	<LI>Fixed some warnings.
+	<LI>Added support for overriding DESTDIR to install in separate dir (for packaging), from debian/d3xter
 </UL>
 
 <P><H3>New in version 3.10:</H3><UL>
