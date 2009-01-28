@@ -928,6 +928,7 @@ authenticate_user_krb5pwd(request_rec *r,
    char            *name = NULL;
    int             all_principals_unkown;
    char            *p = NULL;
+   int             i;
 
    code = krb5_init_context(&kcontext);
    if (code) {
@@ -1075,6 +1076,18 @@ end:
          /* ap_getword_white() used above shifts the parameter, so it's not
             needed to touch the realms variable */
       } while (realms && *realms);
+
+      /* force userid component to lowercase */
+      for (i=0; i>=0 && i<strlen(MK_USER); i++) {
+        if ( MK_USER[i] == '@' )
+        {
+            i = -1;
+        }
+        else
+        {
+            MK_USER[i] = tolower(MK_USER[i]);
+        }
+      }
    } 
 
    log_rerror(APLOG_MARK, APLOG_DEBUG, 0, r,
