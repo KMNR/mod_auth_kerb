@@ -1,6 +1,6 @@
-diff -x .svn -ur mod_auth_kerb-5.3-orig/src/mod_auth_kerb.c mod_auth_kerb-5.3/src/mod_auth_kerb.c
---- mod_auth_kerb-5.3-orig/src/mod_auth_kerb.c	2006-11-22 04:32:58.000000000 -0600
-+++ mod_auth_kerb-5.3/src/mod_auth_kerb.c	2007-08-12 13:38:40.000000000 -0500
+diff -x .svn -ur -h mod_auth_kerb-5.3-orig/src/mod_auth_kerb.c mod_auth_kerb-5.3/src/mod_auth_kerb.c
+--- mod_auth_kerb-5.3-orig/src/mod_auth_kerb.c	2007-08-23 23:04:27.000000000 -0500
++++ mod_auth_kerb-5.3/src/mod_auth_kerb.c	2009-01-27 19:41:42.000000000 -0600
 @@ -153,6 +153,7 @@
   ***************************************************************************/
  typedef struct {
@@ -32,7 +32,7 @@ diff -x .svn -ur mod_auth_kerb-5.3-orig/src/mod_auth_kerb.c mod_auth_kerb-5.3/sr
     command("KrbSaveCredentials", ap_set_flag_slot, krb_save_credentials,
       FLAG, "Save and store credentials/tickets retrieved during auth."),
  
-@@ -333,6 +343,32 @@
+@@ -333,7 +343,33 @@
  krb5_save_realms(cmd_parms *cmd, void *vsec, const char *arg)
  {
     kerb_auth_config *sec = (kerb_auth_config *) vsec;
@@ -54,7 +54,7 @@ diff -x .svn -ur mod_auth_kerb-5.3-orig/src/mod_auth_kerb.c mod_auth_kerb-5.3/sr
 +   }
 +   else
 +   {
-+   sec->krb_auth_realms= apr_pstrdup(cmd->pool, arg);
+    sec->krb_auth_realms= apr_pstrdup(cmd->pool, arg);
 +   }
 +   return NULL;
 +}
@@ -62,10 +62,19 @@ diff -x .svn -ur mod_auth_kerb-5.3-orig/src/mod_auth_kerb.c mod_auth_kerb-5.3/sr
 +static const char*
 +krb5_strip_realms(cmd_parms *cmd, kerb_auth_config *sec, const char *arg)
 +{
-    sec->krb_auth_realms= apr_pstrdup(cmd->pool, arg);
++   sec->krb_strip_realms= apr_pstrdup(cmd->pool, arg);
     return NULL;
  }
-@@ -1016,6 +1052,31 @@
+ 
+@@ -892,6 +928,7 @@
+    char            *name = NULL;
+    int             all_principals_unkown;
+    char            *p = NULL;
++   int             i;
+ 
+    code = krb5_init_context(&kcontext);
+    if (code) {
+@@ -1016,6 +1053,43 @@
     ret = OK;
  
  end:
@@ -92,6 +101,18 @@ diff -x .svn -ur mod_auth_kerb-5.3-orig/src/mod_auth_kerb.c mod_auth_kerb-5.3/sr
 +         /* ap_getword_white() used above shifts the parameter, so it's not
 +            needed to touch the realms variable */
 +      } while (realms && *realms);
++
++      /* force userid component to lowercase */
++      for (i=0; i>=0 && i<strlen(MK_USER); i++) {
++        if ( MK_USER[i] == '@' )
++        {
++            i = -1;
++        }
++        else
++        {
++            MK_USER[i] = tolower(MK_USER[i]);
++        }
++      }
 +   } 
 +
     log_rerror(APLOG_MARK, APLOG_DEBUG, 0, r,
