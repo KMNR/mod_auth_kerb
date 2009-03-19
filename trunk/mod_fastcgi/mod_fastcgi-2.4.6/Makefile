@@ -4,7 +4,7 @@
 
 builddir     = .
 
-top_dir      = /usr/local/apache2
+top_dir      = /etc/httpd
 
 top_srcdir   = ${top_dir}
 top_builddir = ${top_dir}
