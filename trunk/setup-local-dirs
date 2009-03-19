@@ -113,7 +113,7 @@ sub fix_perms
 	&mysystem("chmod go+x $dir");
 	&mysystem("chmod go+x $dir/logs");
 
-	foreach my $otherdir ( "sessions" )
+	foreach my $otherdir ( "sessions", "fastcgi" )
 	{
 		if ( -e "$dir/$otherdir" )
 		{
