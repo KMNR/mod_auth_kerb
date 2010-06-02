@@ -1,1 +1,1 @@
-diff -x .svn -ur mod_auth_kerb-5.3-orig mod_auth_kerb-5.3 -h | grep -v "Only in" > mst.diff
+diff -x .svn -ur mod_auth_kerb-5.4-orig mod_auth_kerb-5.4 -h | grep -v "Only in" > mst.diff
