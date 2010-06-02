@@ -3,6 +3,13 @@ $| = 1;
 
 print "Scanning for local apache directories to update...\n";
 
+# Simplistic but sufficient for now
+my $osdir = "rhel";
+if ( -e "/etc/fedora-release" );
+{
+	$osdir = "fc13";
+}
+
 # Make sure we are running the most current code
 if ( $ARGV[0] ne "--skip-svn" )
 {
@@ -48,7 +55,7 @@ while ( $file = readdir(DIR) )
 		}
 
 		print "Overwriting common config files in /local/$file/conf.\n";
-		system("cp -v /local/apache/conf/* /local/$file/conf/");
+		system("cp -v /local/apache/conf-$osdir/* /local/$file/conf/");
 
 		print "Updating CA chain.crt file.\n";
 		system("mkdir -p /local/$file/ssl");
