@@ -5,7 +5,7 @@ print "Scanning for local apache directories to update...\n";
 
 # Simplistic but sufficient for now
 my $osdir = "rhel";
-if ( -e "/etc/fedora-release" );
+if ( -e "/etc/fedora-release" )
 {
 	$osdir = "fc13";
 }
