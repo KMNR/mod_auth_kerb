@@ -92,6 +92,25 @@ Comments/questions/etc. to nneul@umr.edu
 #include "http_protocol.h"
 #include "http_request.h"
 
+#ifdef STANDARD20_MODULE_STUFF
+#include <apr_strings.h>
+#include <apr_base64.h>
+#else
+#define apr_pstrdup             ap_pstrdup
+#define apr_psprintf            ap_psprintf
+#define apr_pstrcat             ap_pstrcat
+#define apr_pcalloc             ap_pcalloc
+#define apr_table_setn          ap_table_setn
+#define apr_table_add           ap_table_add
+#define apr_base64_decode_len   ap_base64decode_len
+#define apr_base64_decode       ap_base64decode
+#define apr_base64_encode_len   ap_base64encode_len
+#define apr_base64_encode       ap_base64encode
+#define apr_pool_cleanup_null   ap_null_cleanup
+#define apr_pool_cleanup_register       ap_register_cleanup
+#endif /* STANDARD20_MODULE_STUFF */
+
+
 /*
  * Structure for the module itself
  */
@@ -106,7 +125,7 @@ typedef struct {
 
 static void *create_auth_netgroups_config(apr_pool_t *p, char *d)
 {
-	auth_netgroups_config_rec *conf = ap_pcalloc(p, sizeof(*conf));
+	auth_netgroups_config_rec *conf = apr_pcalloc(p, sizeof(*conf));
 	conf->enabled = 0;
 	return conf;
 }
