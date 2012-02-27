@@ -363,11 +363,7 @@ krb5_save_realms(cmd_parms *cmd, void *vsec, const char *arg)
     sec->krb_auth_realms= apr_pstrdup(cmd->pool, 
    "MST.EDU COL.MISSOURI.EDU TIG.MIZZOU.EDU UM.UMSYSTEM.EDU "
    "UMAC.UMSYSTEM.EDU KC.UMKC.EDU UMAD.UMSYSTEM.EDU "
-   "STL.UMSL.EDU");
- 
-/* leave out UMH.EDU, it takes forever to time out since their servers are
-   not accessible */
-
+   "STL.UMSL.EDU UMH.EDU");
    }
    else
    {
