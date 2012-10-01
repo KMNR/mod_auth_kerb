@@ -5,75 +5,74 @@ print "Scanning for local apache directories to update...\n";
 
 # Simplistic but sufficient for now
 my $osdir = "rhel";
-if ( -e "/etc/fedora-release" )
-{
-	$osdir = "fc13";
+if ( -e "/etc/fedora-release" ) {
+    open( my $in, "/etc/fedora-release" );
+    my $rel = join( "", <$in> );
+    close($in);
+    if ( $rel =~ /17/ ) {
+        $osdir = "fc17";
+    }
+    else {
+        $osdir = "fc13";
+    }
 }
 
 # Make sure we are running the most current code
-if ( $ARGV[0] ne "--skip-svn" )
-{
-	my @tmp1 = stat("/local/apache/setup-local-dirs");
-	chdir("/local/apache") || die "failed to switch to /local/apache";
-	system("svn update");
-	my @tmp2 = stat("/local/apache/setup-local-dirs");
-	if ( $tmp1[9] != $tmp2[9] )
-	{
-		print "Restarting update script, file changed.\n";
-		exec( "/local/apache/setup-local-dirs", "--skip-svn" );
-		exit;
-	}
+if ( $ARGV[0] ne "--skip-svn" ) {
+    my @tmp1 = stat("/local/apache/setup-local-dirs");
+    chdir("/local/apache") || die "failed to switch to /local/apache";
+    system("svn update");
+    my @tmp2 = stat("/local/apache/setup-local-dirs");
+    if ( $tmp1[9] != $tmp2[9] ) {
+        print "Restarting update script, file changed.\n";
+        exec( "/local/apache/setup-local-dirs", "--skip-svn" );
+        exit;
+    }
 }
 
 opendir( DIR, "/local" );
-while ( $file = readdir(DIR) )
-{
-	if ( $file eq "apache-root" || $file =~ /apache-root-.*/ )
-	{
-		if ( !-e "/local/$file/conf/httpd.conf" )
-		{
-			print "$file must not be a server install, no httpd.conf\n";
-			next;
-		}
+while ( $file = readdir(DIR) ) {
+    if ( $file eq "apache-root" || $file =~ /apache-root-.*/ ) {
+        if ( !-e "/local/$file/conf/httpd.conf" ) {
+            print "$file must not be a server install, no httpd.conf\n";
+            next;
+        }
 
-		print "Found install at: /local/$file\n";
+        print "Found install at: /local/$file\n";
 
-		$user = undef;
-		open( IN, "/local/$file/conf/httpd.conf" );
-		while ( $line = <IN> )
-		{
-			if ( $line =~ /User\s+(.*?)\s*$/o )
-			{
-				$user = $1;
-			}
-		}
-		close(IN);
+        $user = undef;
+        open( IN, "/local/$file/conf/httpd.conf" );
+        while ( $line = <IN> ) {
+            if ( $line =~ /User\s+(.*?)\s*$/o ) {
+                $user = $1;
+            }
+        }
+        close(IN);
 
-		if ( $user eq "" )
-		{
-			die "Unable to determine user for /local/$file.\n";
-		}
+        if ( $user eq "" ) {
+            die "Unable to determine user for /local/$file.\n";
+        }
 
-		print "Overwriting common config files in /local/$file/conf.\n";
-		system("cp -v /local/apache/conf-$osdir/* /local/$file/conf/");
+        print "Overwriting common config files in /local/$file/conf.\n";
+        system("cp -v /local/apache/conf-$osdir/* /local/$file/conf/");
 
-		print "Updating CA chain.crt file.\n";
-		system("mkdir -p /local/$file/ssl");
-		system("cp -v /local/apache/ssl/chain.crt /local/$file/ssl/");
+        print "Updating CA chain.crt file.\n";
+        system("mkdir -p /local/$file/ssl");
+        system("cp -v /local/apache/ssl/chain.crt /local/$file/ssl/");
 
-		print "Fixing perms for /local/$file for user $user.\n";
-		&fix_perms( "/local/$file", $user );
+        print "Fixing perms for /local/$file for user $user.\n";
+        &fix_perms( "/local/$file", $user );
 
-		print "Updating scripts for /local/$file.\n";
-		&setup_scripts("/local/$file");
+        print "Updating scripts for /local/$file.\n";
+        &setup_scripts("/local/$file");
 
-		print "Removing any existing local-modules dir.\n";
-		&mysystem("rm -rf /local/$file/local-modules");
-	}
+        print "Removing any existing local-modules dir.\n";
+        &mysystem("rm -rf /local/$file/local-modules");
+    }
 }
 
 unlink("/home/local/adm/rc-start/rc.500.httpd");
-open(OUT, ">/home/local/adm/rc-start/rc.500.httpd");
+open( OUT, ">/home/local/adm/rc-start/rc.500.httpd" );
 print OUT "#!/bin/sh\n";
 print OUT "/local/apache/stop-all\n";
 print OUT "/local/apache/start-all\n";
@@ -81,148 +80,133 @@ close(OUT);
 system("chmod 755 /home/local/adm/rc-start/rc.500.httpd");
 
 unlink("/home/local/adm/rc-stop/rc.500.httpd");
-open(OUT, ">/home/local/adm/rc-stop/rc.500.httpd");
+open( OUT, ">/home/local/adm/rc-stop/rc.500.httpd" );
 print OUT "#!/bin/sh\n";
 print OUT "/local/apache/stop-all\n";
 close(OUT);
 system("chmod 755 /home/local/adm/rc-stop/rc.500.httpd");
 
-
-sub mysystem
-{
-	my ($cmd) = @_;
-	print "+ $cmd\n";
-	system($cmd);
+sub mysystem {
+    my ($cmd) = @_;
+    print "+ $cmd\n";
+    system($cmd);
 }
 
-sub fix_perms
-{
-	my ( $dir, $user ) = @_;
+sub fix_perms {
+    my ( $dir, $user ) = @_;
 
-	&mysystem("chown -R root:root $dir");
-	&mysystem("chown -R $user:$user $dir/logs");
-	&mysystem("chown -R $user:$user $dir/htdocs*");
-	&mysystem("chown root:root $dir/logs");
-	&mysystem("chown root:root $dir/logs/pidfile");
-	&mysystem("chmod -R go-rwx $dir");
+    &mysystem("chown -R root:root $dir");
+    &mysystem("chown -R $user:$user $dir/logs");
+    &mysystem("chown -R $user:$user $dir/htdocs*");
+    &mysystem("chown root:root $dir/logs");
+    &mysystem("chown root:root $dir/logs/pidfile");
+    &mysystem("chmod -R go-rwx $dir");
 
-	my @pats = glob("$dir/*cgi*");
-	if ( $#pats >= 0 )
-	{
-		&mysystem("chmod -R go+rx $dir/*cgi*");
-	}
+    my @pats = glob("$dir/*cgi*");
+    if ( $#pats >= 0 ) {
+        &mysystem("chmod -R go+rx $dir/*cgi*");
+    }
 
-	my @pats = glob("$dir/*cgi*/*cgiwrap*");
-	if ( $#pats >= 0 )
-	{
-		&mysystem("chown root:root $dir/*cgi*/*cgiwrap*");
-		&mysystem("chmod 4755 $dir/*cgi*/*cgiwrap*");
-	}
+    my @pats = glob("$dir/*cgi*/*cgiwrap*");
+    if ( $#pats >= 0 ) {
+        &mysystem("chown root:root $dir/*cgi*/*cgiwrap*");
+        &mysystem("chmod 4755 $dir/*cgi*/*cgiwrap*");
+    }
 
-	if ( -e "$dir/rpc" )
-	{
-		&mysystem("chown -R $user:$user $dir/rpc");
-	}
+    if ( -e "$dir/rpc" ) {
+        &mysystem("chown -R $user:$user $dir/rpc");
+    }
 
-	&mysystem("chmod go+x $dir");
-	&mysystem("chmod go+x $dir/logs");
+    &mysystem("chmod go+x $dir");
+    &mysystem("chmod go+x $dir/logs");
 
-	foreach my $otherdir ( "sessions", "fastcgi" )
-	{
-		if ( -e "$dir/$otherdir" )
-		{
-			if ( $user eq "" )
-			{
-				die "Cannot set $otherdir permissions, no user specified.\n";
-			}
-			&mysystem("chown -R $user:$user $dir/$otherdir");
-		}
-	}
+    foreach my $otherdir ( "sessions", "fastcgi" ) {
+        if ( -e "$dir/$otherdir" ) {
+            if ( $user eq "" ) {
+                die "Cannot set $otherdir permissions, no user specified.\n";
+            }
+            &mysystem("chown -R $user:$user $dir/$otherdir");
+        }
+    }
 }
 
-sub setup_scripts
-{
-	my ($dir) = @_;
+sub setup_scripts {
+    my ($dir) = @_;
 
-	#
-	# First start
-	#
-	unlink("$dir/start");
-	open( OUT, ">$dir/start" );
-	print OUT "#!/bin/sh\n";
-	print OUT "TZ=CST6CDT\n";
-	print OUT "export TZ\n\n";
+    #
+    # First start
+    #
+    unlink("$dir/start");
+    open( OUT, ">$dir/start" );
+    print OUT "#!/bin/sh\n";
+    print OUT "TZ=CST6CDT\n";
+    print OUT "export TZ\n\n";
 
+    my $using_mod_perl = 0;
+    open( IN, "$dir/conf/httpd.conf" );
+    while ( chomp( $line = <IN> ) ) {
+        if ( $line =~ /LoadModule.*mod_perl/o || $line =~ /modperl.conf/o ) {
+            $using_mod_perl = 1;
+        }
+    }
+    if ($using_mod_perl) {
+        print OUT "export ORACLE_HOME=/usr/oracle\n";
+        print OUT "export LD_PRELOAD=/usr/oracle/lib/libclntsh.so\n";
+        print OUT "export LANG=C\n";
+        print OUT "# disable per performance impact\n";
+        print OUT "#export NLS_LANG=AMERICAN_AMERICA.UTF8\n";
+        print OUT "export MALLOC_CHECK_=0\n";
+        print OUT "\n";
+    }
 
-	my $using_mod_perl = 0;
-	open(IN, "$dir/conf/httpd.conf");
-	while ( chomp($line = <IN>) )
-	{
-		if ( $line =~ /LoadModule.*mod_perl/o || $line =~ /modperl.conf/o )
-		{
-			$using_mod_perl = 1;
-		}
-	}
-	if ( $using_mod_perl )
-	{
-		print OUT "export ORACLE_HOME=/usr/oracle\n";
-		print OUT "export LD_PRELOAD=/usr/oracle/lib/libclntsh.so\n";
-		print OUT "export LANG=C\n";
-		print OUT "# disable per performance impact\n";
-		print OUT "#export NLS_LANG=AMERICAN_AMERICA.UTF8\n";
-		print OUT "export MALLOC_CHECK_=0\n";
-		print OUT "\n";
-	}
+    print OUT "cd $dir\n";
+    print OUT "echo Starting Apache in $dir\n";
+    print OUT "/usr/sbin/httpd -d $dir\n";
+    close(OUT);
+    &mysystem("chmod 700 $dir/start");
 
-	print OUT "cd $dir\n";
-	print OUT "echo Starting Apache in $dir\n";
-	print OUT "/usr/sbin/httpd -d $dir\n";
-	close(OUT);
-	&mysystem("chmod 700 $dir/start");
+    #
+    # And stop
+    #
+    unlink("$dir/stop");
+    open( OUT, ">$dir/stop" );
+    print OUT "#!/bin/sh\n";
+    print OUT "cd $dir\n";
+    print OUT "if [ -e logs/pidfile ]; then\n";
+    print OUT "echo Stopping Apache in $dir with pid \`cat logs/pidfile\`\n";
+    print OUT "touch $dir/logs/TMP\n";
+    print OUT "kill \`cat logs/pidfile\`\n";
+    print OUT "sleep 2\n";
+    print OUT "fi\n";
+    print OUT "rm -f $dir/logs/TMP $dir/logs/httpd.mm.* $dir/logs/ssl_mutex* $dir/logs/ssl_scache*\n";
+    close(OUT);
+    &mysystem("chmod 700 $dir/stop");
 
-	#
-	# And stop
-	#
-	unlink("$dir/stop");
-	open( OUT, ">$dir/stop" );
-	print OUT "#!/bin/sh\n";
-	print OUT "cd $dir\n";
-	print OUT "if [ -e logs/pidfile ]; then\n";
-	print OUT "echo Stopping Apache in $dir with pid \`cat logs/pidfile\`\n";
-	print OUT "touch $dir/logs/TMP\n";
-	print OUT "kill \`cat logs/pidfile\`\n";
-	print OUT "sleep 2\n";
-	print OUT "fi\n";
-	print OUT
-		"rm -f $dir/logs/TMP $dir/logs/httpd.mm.* $dir/logs/ssl_mutex* $dir/logs/ssl_scache*\n";
-	close(OUT);
-	&mysystem("chmod 700 $dir/stop");
+    #
+    # And restart
+    #
+    unlink("$dir/restart");
+    open( OUT, ">$dir/restart" );
+    print OUT "#!/bin/sh\n";
+    print OUT "cd $dir\n";
+    print OUT "./stop\n";
+    print OUT "sleep 1\n";
+    print OUT "./start\n";
+    close(OUT);
+    &mysystem("chmod 700 $dir/restart");
 
-	#
-	# And restart
-	#
-	unlink("$dir/restart");
-	open( OUT, ">$dir/restart" );
-	print OUT "#!/bin/sh\n";
-	print OUT "cd $dir\n";
-	print OUT "./stop\n";
-	print OUT "sleep 1\n";
-	print OUT "./start\n";
-	close(OUT);
-	&mysystem("chmod 700 $dir/restart");
-
-	#
-	# And reload
-	#
-	unlink("$dir/reload");
-	open( OUT, ">$dir/reload" );
-	print OUT "#!/bin/sh\n";
-	print OUT "cd $dir\n";
-	print OUT "if [ -e logs/pidfile ]; then\n";
-	print OUT "echo Reloading Apache in $dir with pid \`cat logs/pidfile\`\n";
-	print OUT "kill -HUP \`cat logs/pidfile\`\n";
-	print OUT "fi\n";
-	close(OUT);
-	&mysystem("chmod 700 $dir/reload");
+    #
+    # And reload
+    #
+    unlink("$dir/reload");
+    open( OUT, ">$dir/reload" );
+    print OUT "#!/bin/sh\n";
+    print OUT "cd $dir\n";
+    print OUT "if [ -e logs/pidfile ]; then\n";
+    print OUT "echo Reloading Apache in $dir with pid \`cat logs/pidfile\`\n";
+    print OUT "kill -HUP \`cat logs/pidfile\`\n";
+    print OUT "fi\n";
+    close(OUT);
+    &mysystem("chmod 700 $dir/reload");
 
 }
