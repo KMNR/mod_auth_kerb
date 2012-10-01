@@ -149,7 +149,17 @@ sub setup_scripts {
             $using_mod_perl = 1;
         }
     }
-    if ($using_mod_perl) {
+    if ( $using_mod_perl && $osdir eq "fc17" ) {
+        print OUT "export ORACLE_HOME=/usr/oracle\n";
+        print OUT
+            "export LD_PRELOAD=/usr/lib64/libkrb5support.so:/usr/lib64/libkrb5.so:/usr/lib64/libgssapi_krb5.so:/usr/oracle/lib/libclntsh.so\n";
+        print OUT "export LANG=C\n";
+        print OUT "# disable per performance impact\n";
+        print OUT "#export NLS_LANG=AMERICAN_AMERICA.UTF8\n";
+        print OUT "export MALLOC_CHECK_=0\n";
+        print OUT "\n";
+    }
+    elsif ($using_mod_perl) {
         print OUT "export ORACLE_HOME=/usr/oracle\n";
         print OUT "export LD_PRELOAD=/usr/oracle/lib/libclntsh.so\n";
         print OUT "export LANG=C\n";
