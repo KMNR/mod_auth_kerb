@@ -7,7 +7,25 @@ Patched version of mod_auth_kerb for communicating with Missouri S&amp;T authent
 HOWTO Install
 =============
 
-Coming soon.
+Obviously, you need a compiler. The pachage you will be installing is located under /trunk/mod_auth_kerb/mod_auth_kerb-5.4/. Prerequisites for compilation include:
+
+For CentOS
+----------
+
+krb5-devel
+httpd-devel
+
+
+For Ubuntu/Debian
+-----------------
+libkrb5-dev
+apache2-threaded-dev
+
+With those installed, you should be able to compile and install.
+
+     $ ./configure --with-krb4=no
+     $ make
+     $ sudo make install
 
 
 Source
